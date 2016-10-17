@@ -1,4 +1,5 @@
+import java.util.*;
 
-public class Manager {
+public class Manager implements Runnable{
 
 }

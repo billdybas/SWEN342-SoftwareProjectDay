@@ -1,4 +1,5 @@
+import java.util.*;
 
-public class Employee {
+public class Employee implements Runnable{
 
 }
