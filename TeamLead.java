@@ -1,5 +1,9 @@
 
-public class TeamLead extends Employee {
+public class TeamLead extends Employee implements Curious {
+
+	public TeamLead(Manager manager) {
+
+	}
 
 	@Override
 	public void run() {
@@ -8,7 +12,9 @@ public class TeamLead extends Employee {
 
 	}
 
-	public boolean hasArrived() {
+	@Override
+	public void askQuestion(Employee whoHasAnswer) {
+		// TODO Auto-generated method stub
 
 	}
 

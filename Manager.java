@@ -1,8 +1,15 @@
+import java.util.List;
 
 public class Manager extends Employee {
 
-	public Manager() {
+	private List<Team> teams;
 
+	public Manager(List<Team> teams) {
+		if (teams.size() != 3) {
+			throw new IllegalArgumentException("The List of Teams Must Have Exactly 3 Teams");
+		}
+
+		this.teams = teams;
 	}
 
 	@Override

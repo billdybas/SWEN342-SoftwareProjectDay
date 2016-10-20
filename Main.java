@@ -1,9 +1,21 @@
+import java.util.ArrayList;
 
 public class Main {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
+		Manager manager = new Manager();
+
+		ArrayList<Team> teams = new ArrayList<Team>();
+		for (int i = 0; i < 3; i++) {
+			TeamLead leader = new TeamLead(manager);
+
+			ArrayList<Developer> developers = new ArrayList<Developer>();
+			for (int j = 0; j < 3; j++) {
+					developers.add(new Developer(leader));
+			}
+
+			teams.add(new Team(leader, developers));
+		}
 	}
-
 }
