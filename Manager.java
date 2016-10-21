@@ -1,6 +1,6 @@
 import java.util.List;
 
-public class Manager extends Employee {
+public class Manager extends Employee implements Knowledgeable {
 
 	private List<Team> teams;
 
@@ -14,10 +14,30 @@ public class Manager extends Employee {
 
 	@Override
 	public void run() {
-		// Arrives at 8 AM each day
-		// - Engages in planning and then waits until all team leads have arrived
-		// - When they all arrive, has 15 minute standup meeting
 
+		// switch (currentTime)
+		// case 8AM
+		//	arrive at work
+		//  wait for leads to arrive
+		//	15 minute standup meeting
+		// case 10AM - 11AM
+		//  1 hr meeting
+		// case 12PM - 1PM (1 hour closest to this time after 12PM)
+		//  eat lunch
+		// case 2PM - 3PM
+		//  1 hr meeting
+		// case 4:15PM
+		//  15 minute meeting about project status
+		// case 5PM
+		//  leave (always last person out)
+		// default
+		//	work until questions are answered
+		//  (finishes answering questions and then goes to meetings or lunch)
 	}
 
+	@Override
+	public void answerQuestion(Employee whoHasQuestion) {
+		// TODO Auto-generated method stub
+
+	}
 }

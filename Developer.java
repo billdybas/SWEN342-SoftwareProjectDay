@@ -1,9 +1,9 @@
 
-public class Developer extends Employee implements Curious {
-    private Manager manager;
+public class Developer extends Employee {
+    private TeamLead leader;
 
     public Developer(TeamLead leader) {
-
+        this.leader = leader;
     }
 
     @Override
@@ -12,9 +12,4 @@ public class Developer extends Employee implements Curious {
         // 2. Enter Conference Room w/ Team Members
     }
 
-	@Override
-	public void askQuestion(Employee whoHasAnswer) {
-		// TODO Auto-generated method stub
-
-	}
 }
