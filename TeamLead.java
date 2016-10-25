@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public class TeamLead extends Employee implements Knowledgeable {
+public class TeamLead extends Employee implements Knowledgeable, Curious {
 
 	private Manager manager;
 	private Random rng = new Random();
@@ -48,6 +48,7 @@ public class TeamLead extends Employee implements Knowledgeable {
 		// TODO: return to work
 	}
 
+	@Override
 	public void askQuestion() {
 		// TODO: go to PM office to ask question
 
