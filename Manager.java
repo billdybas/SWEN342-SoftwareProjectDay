@@ -45,4 +45,20 @@ public class Manager extends Employee implements Knowledgeable {
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public void arrive() {
+		// First to arrive at 8 AM
+	}
+
+	@Override
+	public void takeLunch() {
+		// Always takes an hour lunch starting closest to 12 - 1 PM
+	}
+
+	@Override
+	public void leave() {
+		// Ensures that all employees have left
+		// Leaves at 5 PM
+	}
 }
