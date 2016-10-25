@@ -4,6 +4,8 @@ public class Manager extends Employee implements Knowledgeable {
 
 	private List<Team> teams;
 
+	public Manager() {}
+
 	public Manager(List<Team> teams) {
 		if (teams.size() != 3) {
 			throw new IllegalArgumentException("The List of Teams Must Have Exactly 3 Teams");
@@ -12,9 +14,12 @@ public class Manager extends Employee implements Knowledgeable {
 		this.teams = teams;
 	}
 
+	public void setTeams(List<Team> teams) {
+		this.teams = teams;
+	}
+
 	@Override
 	public void run() {
-
 		// switch (currentTime)
 		// case 8AM
 		//	arrive at work

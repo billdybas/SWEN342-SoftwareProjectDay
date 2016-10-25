@@ -1,7 +1,9 @@
+import java.util.Random;
 
 public class TeamLead extends Employee implements Knowledgeable {
 
 	private Manager manager;
+	private Random rng = new Random();
 
 	public TeamLead(Manager manager) {
 		this.manager = manager;
@@ -36,11 +38,20 @@ public class TeamLead extends Employee implements Knowledgeable {
 
 	@Override
 	public void answerQuestion(Employee whoHasQuestion) {
-		// 50% chance that can answer Developer's Question
-		// - if so, return to work
-		// - if can't, go to PM office to get question answered
+		if (rng.nextDouble() < 0.5) {
+			// TODO: go to PM office w/ developer
 
-		// If have question, go to PM office to get answer
+			// Ask the Manager the Developer's Question
+			manager.answerQuestion(whoHasQuestion);
+		}
+
+		// TODO: return to work
 	}
 
+	public void askQuestion() {
+		// TODO: go to PM office to ask question
+
+		// Ask the Manager a Question
+		manager.answerQuestion(this);
+	}
 }
