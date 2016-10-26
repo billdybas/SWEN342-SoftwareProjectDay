@@ -1,3 +1,4 @@
+import java.util.concurrent.BrokenBarrierException;
 
 public class Developer extends Employee implements Curious {
     private TeamLead leader;
@@ -8,6 +9,16 @@ public class Developer extends Employee implements Curious {
 
     @Override
     public void run() {
+
+    	this.arrive();
+
+    	try {
+			leader.getDeveloperStandUpBarrier().await();
+		} catch (InterruptedException | BrokenBarrierException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
         // 1. Arrive
         // 2. Wait for TeamLead to say to go to the meeting
         // 3. Wait for the Conference Room

@@ -1,10 +1,13 @@
 import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CyclicBarrier;
 
 public class Manager extends Employee implements Knowledgeable {
 
 	private List<Team> teams;
+	private Queue<Employee> waitingForAnswers = new ConcurrentLinkedQueue<Employee>();
 	private CyclicBarrier standUpBarrier;
 	private CyclicBarrier statusUpdateBarrier;
 	private boolean hasEatenLunch;
@@ -68,8 +71,9 @@ public class Manager extends Employee implements Knowledgeable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			} else {
-				// TODO: See if there are any questions to be answered
+			} else if (this.waitingForAnswers.size() > 0) {
+				// Answer the question of the first Employee in the Queue
+				this.answerQuestion(this.waitingForAnswers.poll());
 			}
 		}
 
@@ -114,7 +118,7 @@ public class Manager extends Employee implements Knowledgeable {
 	}
 
 	public void knockOnDoor(Employee whoIsKnocking) {
-
+		this.waitingForAnswers.add(whoIsKnocking);
 	}
 
 	public CyclicBarrier getStandUpBarrier() {

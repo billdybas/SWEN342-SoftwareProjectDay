@@ -1,13 +1,16 @@
 import java.util.Random;
 import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
 public class TeamLead extends Employee implements Knowledgeable, Curious {
 
 	private Manager manager;
 	private Random rng = new Random();
+	private CyclicBarrier developerStandUpBarrier;
 
 	public TeamLead(Manager manager) {
 		this.manager = manager;
+		this.developerStandUpBarrier = new CyclicBarrier(3);
 	}
 
 	@Override
@@ -15,8 +18,52 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 
 		this.arrive();
 
+		// Tell the Manager they have arrived
 		try {
 			manager.getStandUpBarrier().await();
+		} catch (InterruptedException | BrokenBarrierException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// Meet for 15 Minutes
+		try {
+			Thread.sleep(15 * Time.MINUTE.getMillis());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+		// Wait for their Developers to arrive
+		try {
+			developerStandUpBarrier.await();
+		} catch (InterruptedException | BrokenBarrierException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		// Try to get into Conference Room
+		// while conference room is busy
+		//		wait (people who leave conference room notify people)
+
+		// Meet for 15 Minutes
+		try {
+			Thread.sleep(15 * Time.MINUTE.getMillis());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// notifyAll?
+
+
+		// TODO: Copy Manager logic for taking lunch and answering Developer Questions
+		// Lunch will be random and happen once
+		// Lunch >= 30 min && < 60 min
+
+		try {
+			manager.getStatusUpdateBarrier().await();
 		} catch (InterruptedException | BrokenBarrierException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -54,6 +101,10 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 		// When they arrive, knock on Manager door and do 15 minute meeting
 		// After meeting, wait for conference room and all developers on same team present, enter room and have 15 minute meeting
 
+	}
+
+	public CyclicBarrier getDeveloperStandUpBarrier() {
+		return this.developerStandUpBarrier;
 	}
 
 	@Override
