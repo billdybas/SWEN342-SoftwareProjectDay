@@ -21,7 +21,7 @@ public class Manager extends Employee implements Knowledgeable {
 
 		this.teams = teams;
 		this.standUpBarrier = new CyclicBarrier(3);
-		this.statusUpdateBarrier = new CyclicBarrier(3);
+		this.statusUpdateBarrier = new CyclicBarrier(12);
 	}
 
 	public void setTeams(List<Team> teams) {

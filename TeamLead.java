@@ -61,6 +61,7 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 		// TODO: Copy Manager logic for taking lunch and answering Developer Questions
 		// Lunch will be random and happen once
 		// Lunch >= 30 min && < 60 min
+		// Randomly ask question to manager
 
 		try {
 			manager.getStatusUpdateBarrier().await();
@@ -105,6 +106,10 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 
 	public CyclicBarrier getDeveloperStandUpBarrier() {
 		return this.developerStandUpBarrier;
+	}
+
+	public Manager getManager() {
+		return this.manager;
 	}
 
 	@Override
