@@ -11,6 +11,8 @@ public class Manager extends Employee implements Knowledgeable {
 	private CyclicBarrier standUpBarrier;
 	private CyclicBarrier statusUpdateBarrier;
 	private boolean hasEatenLunch;
+	private boolean firstMeeting;
+	private boolean secondMeeting;
 
 	public Manager() {}
 
@@ -20,8 +22,31 @@ public class Manager extends Employee implements Knowledgeable {
 		}
 
 		this.teams = teams;
-		this.standUpBarrier = new CyclicBarrier(3);
-		this.statusUpdateBarrier = new CyclicBarrier(12);
+		this.standUpBarrier = new CyclicBarrier(3, 
+				new Runnable() {
+			public void run(){
+				try {
+					this.wait(15 * Time.MINUTE.getMillis());
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
+		this.statusUpdateBarrier = new CyclicBarrier(12,
+				new Runnable() {
+			public void run(){
+				try {
+					this.wait(15 * Time.MINUTE.getMillis());
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
+		this.firstMeeting = false;
+		this.hasEatenLunch = false;
+		this.secondMeeting = false;
 	}
 
 	public void setTeams(List<Team> teams) {
@@ -55,17 +80,24 @@ public class Manager extends Employee implements Knowledgeable {
 		while(Workday.getDelta() < Time.PM_FOUR.getMillis()) {
 			long delta = Workday.getDelta();
 
-			if (delta >= Time.PM_TWO.getMillis()) {
+			if (delta >= Time.PM_TWO.getMillis() && !this.secondMeeting) {
 				try {
+					this.secondMeeting = true;
 					Thread.sleep(Time.PM_THREE.getMillis() - delta);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			} else if (delta >= Time.PM_TWELVE.getMillis() && !this.hasEatenLunch) {
-				// TODO: Figure out lunch
-			} else if (delta >= Time.AM_TEN.getMillis()) {
+				try { 
+					this.hasEatenLunch = true;
+					Thread.sleep(Time.PM_ONE.getMillis() - delta);
+				} catch (InterruptedException e){
+					e.printStackTrace();
+				}
+			} else if (delta >= Time.AM_TEN.getMillis() && !this.firstMeeting) {
 				try {
+					this.firstMeeting = true;
 					Thread.sleep(Time.AM_ELEVEN.getMillis() - delta);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -82,14 +114,6 @@ public class Manager extends Employee implements Knowledgeable {
 			System.out.println("Manager waits for Team Leads to arrive.");
 			this.statusUpdateBarrier.await();
 		} catch (InterruptedException | BrokenBarrierException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		// Meet for 15 Minutes
-		try {
-			Thread.sleep(15 * Time.MINUTE.getMillis());
-		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -132,8 +156,9 @@ public class Manager extends Employee implements Knowledgeable {
 	@Override
 	public void answerQuestion(Employee whoHasQuestion) {
 		// Answering a Question takes 10 minutes
+		System.out.println(Workday.getDelta()+"The Manager Answers the Question");
 		try {
-			Thread.sleep(10 * Time.MINUTE.getMillis());
+			this.wait(10*Time.MINUTE.getMillis());
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

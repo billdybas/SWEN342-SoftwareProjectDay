@@ -32,13 +32,7 @@ public class Developer extends Employee implements Curious {
 			e.printStackTrace();
 		}
 
-		// Meet for 15 Minutes
-		try {
-			Thread.sleep(15 * Time.MINUTE.getMillis());
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 
         // 1. Arrive
         // 2. Wait for TeamLead to say to go to the meeting

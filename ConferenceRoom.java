@@ -1,15 +1,24 @@
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class ConferenceRoom {
 
-	public ConferenceRoom() {
-
+	private Queue<Employee> resList  = new LinkedList<>();
+	
+	public ConferenceRoom(){
 	}
-
-	public boolean isAvailable() {
-
+	
+	synchronized public void getRes(Employee e) throws InterruptedException{
+		resList.add(e);
+		while(true){
+			if(!resList.peek().equals(e)){
+				wait();
+			}
+		}
 	}
-
-	public boolean enterRoom(Team team) {
-
+	
+	synchronized public void relRes(Employee e){
+		resList.poll();
+		notifyAll();
 	}
 }

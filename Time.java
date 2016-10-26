@@ -7,6 +7,7 @@ public enum Time {
 	AM_TEN(2 * HOUR.getMillis()),
 	AM_ELEVEN(3 * HOUR.getMillis()),
 	PM_TWELVE(4 * HOUR.getMillis()),
+	PM_ONE(5* HOUR.getMillis()),
 	PM_TWO(6 * HOUR.getMillis()),
 	PM_THREE(7 * HOUR.getMillis()),
 	PM_FOUR(8 * HOUR.getMillis());
