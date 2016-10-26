@@ -9,6 +9,7 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 	private CyclicBarrier developerStandUpBarrier;
 	private ConferenceRoom confRoom;
 	private boolean hasEatenLunch;
+	//Making sure things push
 	
 	public TeamLead(){
 		
