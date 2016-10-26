@@ -1,8 +1,13 @@
 import java.util.List;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
 public class Manager extends Employee implements Knowledgeable {
 
 	private List<Team> teams;
+	private CyclicBarrier standUpBarrier;
+	private CyclicBarrier statusUpdateBarrier;
+	private boolean hasEatenLunch;
 
 	public Manager() {}
 
@@ -12,6 +17,8 @@ public class Manager extends Employee implements Knowledgeable {
 		}
 
 		this.teams = teams;
+		this.standUpBarrier = new CyclicBarrier(3);
+		this.statusUpdateBarrier = new CyclicBarrier(3);
 	}
 
 	public void setTeams(List<Team> teams) {
@@ -20,6 +27,72 @@ public class Manager extends Employee implements Knowledgeable {
 
 	@Override
 	public void run() {
+
+		// Arrive at 8AM
+		this.arrive();
+
+		// Wait for all Team Leads to arrive
+		try {
+			System.out.println("Manager waits for Team Leads to arrive.");
+			this.standUpBarrier.await();
+		} catch (InterruptedException | BrokenBarrierException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// Meet for 15 Minutes
+		try {
+			Thread.sleep(15 * Time.MINUTE.getMillis());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// While the current time is before 4PM
+		while(Workday.getDelta() < Time.PM_FOUR.getMillis()) {
+			long delta = Workday.getDelta();
+
+			if (delta >= Time.PM_TWO.getMillis()) {
+				try {
+					Thread.sleep(Time.PM_THREE.getMillis() - delta);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} else if (delta >= Time.PM_TWELVE.getMillis() && !this.hasEatenLunch) {
+				// TODO: Figure out lunch
+			} else if (delta >= Time.AM_TEN.getMillis()) {
+				try {
+					Thread.sleep(Time.AM_ELEVEN.getMillis() - delta);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} else {
+				// TODO: See if there are any questions to be answered
+			}
+		}
+
+		// Wait for all Team Leads to arrive
+		try {
+			System.out.println("Manager waits for Team Leads to arrive.");
+			this.statusUpdateBarrier.await();
+		} catch (InterruptedException | BrokenBarrierException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// Meet for 15 Minutes
+		try {
+			Thread.sleep(15 * Time.MINUTE.getMillis());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		this.leave();
+
+
 		// switch (currentTime)
 		// case 8AM
 		//	arrive at work
@@ -40,15 +113,33 @@ public class Manager extends Employee implements Knowledgeable {
 		//  (finishes answering questions and then goes to meetings or lunch)
 	}
 
+	public void knockOnDoor(Employee whoIsKnocking) {
+
+	}
+
+	public CyclicBarrier getStandUpBarrier() {
+		return this.standUpBarrier;
+	}
+
+	public CyclicBarrier getStatusUpdateBarrier() {
+		return this.statusUpdateBarrier;
+	}
+
 	@Override
 	public void answerQuestion(Employee whoHasQuestion) {
-		// TODO Auto-generated method stub
-
+		// Answering a Question takes 10 minutes
+		try {
+			Thread.sleep(10 * Time.MINUTE.getMillis());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void arrive() {
 		// First to arrive at 8 AM
+
 	}
 
 	@Override

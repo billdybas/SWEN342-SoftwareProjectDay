@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.concurrent.BrokenBarrierException;
 
 public class TeamLead extends Employee implements Knowledgeable, Curious {
 
@@ -11,6 +12,25 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 
 	@Override
 	public void run() {
+
+		this.arrive();
+
+		try {
+			manager.getStandUpBarrier().await();
+		} catch (InterruptedException | BrokenBarrierException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// Meet for 15 Minutes
+		try {
+			Thread.sleep(15 * Time.MINUTE.getMillis());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
 
 		// switch (currentTime)
 		// case 8 - 8:30 AM

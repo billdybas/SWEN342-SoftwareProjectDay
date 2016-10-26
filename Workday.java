@@ -1,14 +1,17 @@
 
 public class Workday {
-	//We will have an enum of the various parts of the day
-	// This will contain the barrier of the the entrance and exits, and
-	// the barrier for the full workday
-	public enum times {
+	private static final Workday instance = new Workday();
+	private static long startTimeMillis;
 
-		WORKDAY(4800),
-		HOUR(600),
-		MINUTE(10)
-
+	private Workday() {
+		startTimeMillis = System.currentTimeMillis();
 	}
 
+	public static Workday getInstance() {
+		return instance;
+	}
+
+	public static long getDelta() {
+		return System.currentTimeMillis() - startTimeMillis;
+	}
 }

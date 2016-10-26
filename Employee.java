@@ -1,12 +1,14 @@
 
 public abstract class Employee implements Runnable {
 
-	public abstract boolean hasArrived();
+	private boolean isEmployeeInFirm = false;
 
-	public abstract boolean hasLeft();
+	public boolean isInFirm() {
+		return isEmployeeInFirm;
+	}
 
 	public void arrive() {
-
+		this.isEmployeeInFirm = true;
 	}
 
 	public void takeLunch() {
@@ -14,6 +16,6 @@ public abstract class Employee implements Runnable {
 	}
 
 	public void leave() {
-
+		this.isEmployeeInFirm = false;
 	}
 }
