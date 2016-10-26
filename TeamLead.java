@@ -8,6 +8,7 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 	private Random rng = new Random();
 	private CyclicBarrier developerStandUpBarrier;
 	private ConferenceRoom confRoom;
+	private boolean hasEatenLunch;
 	
 	public TeamLead(){
 		
@@ -67,6 +68,23 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 		// notifyAll?
 
 
+		// While the current time is before 4PM
+		while(Workday.getDelta() < Time.PM_FOUR.getMillis()) {
+			long delta = Workday.getDelta();
+
+			if (delta >= Time.PM_TWELVE.getMillis() && !this.hasEatenLunch) {
+				try {
+					this.hasEatenLunch = true;
+					Thread.sleep(til.randomInBetween(Time.MINUTE.ms() * 3, Time.HOUR.ms()));
+				} catch (InterruptedException e){
+					e.printStackTrace();
+				}
+			} else if (this.waitingForAnswers.size() > 0) {
+				// Answer the question of the first Employee in the Queue
+				this.answerQuestion(this.waitingForAnswers.poll());
+			}
+		}
+
 		// TODO: Copy Manager logic for taking lunch and answering Developer Questions
 		// Lunch will be random and happen once
 		// Lunch >= 30 min && < 60 min
@@ -86,26 +104,6 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-
-
-		// switch (currentTime)
-		// case 8 - 8:30 AM
-		//  arrive
-		//  wait for all other leads to arrive
-		//  knock on manager door
-		//  15 minute standup
-		//  wait for members of team to arrive
-		//  wait for conference room to be available
-		//  15 minute standup with team
-		// case 4 - 4:15PM
-		//  go into conference room
-		//  15 minute meeting
-		// case 4:30 - 5PM
-		//  leave (as long as has worked 8 hours)
-		// default
-		//  answer dev's question
-		//  or ask question (self or dev's) to manager
 
 
 		// When they arrive, knock on Manager door and do 15 minute meeting
