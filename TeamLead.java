@@ -1,6 +1,7 @@
 import java.util.Random;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class TeamLead extends Employee implements Knowledgeable, Curious {
 
@@ -76,7 +77,7 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 			if (delta >= Time.PM_TWELVE.getMillis() && !this.hasEatenLunch) {
 				try {
 					this.hasEatenLunch = true;
-					Thread.sleep(til.randomInBetween(Time.MINUTE.ms() * 3, Time.HOUR.ms()));
+					Thread.sleep(ThreadLocalRandom.nextInt(Time.MINUTE.ms() * 3, Time.HOUR.ms() + 1));
 				} catch (InterruptedException e){
 					e.printStackTrace();
 				}
