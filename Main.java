@@ -1,24 +1,25 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class Main {
 
 	public static void main(String[] args) {
-
-		Manager manager = new Manager();
-
-		List<Team> teams = new ArrayList<Team>();
+		TeamLead[] leads = new TeamLead[3];
+		Developer[] devs = new Developer[9];
+		CountDownLatch latch = new CountDownLatch(1);
+		Manager manager = new Manager(latch);
 		for (int i = 0; i < 3; i++) {
-			TeamLead leader = new TeamLead(manager);
+			leads[i] = new TeamLead(manager, i + 1, latch);
 
-			List<Developer> developers = new ArrayList<Developer>();
 			for (int j = 0; j < 3; j++) {
-					developers.add(new Developer(leader));
+					devs[(i * 3) + j] = new Developer(leads[i], (((i+1)*10)+(j+1)), latch);
 			}
-
-			teams.add(new Team(leader, developers));
 		}
-
-		manager.setTeams(teams);
+		(new Thread(manager)).start();
+		for(TeamLead lead : leads){
+			(new Thread(lead)).start();
+		}
+		for(Developer dev : devs){
+			(new Thread(dev)).start();
+		}
 	}
 }
