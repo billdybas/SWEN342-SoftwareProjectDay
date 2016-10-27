@@ -7,18 +7,28 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 	private Manager manager;
 	private Random rng = new Random();
 	private CyclicBarrier developerStandUpBarrier;
-	private ConferenceRoom confRoom;
 	private boolean hasEatenLunch;
-	//Making sure things push
 	
 	public TeamLead(){
 		
 	}
 	
-	public TeamLead(Manager manager, ConferenceRoom confRoom) {
+	public TeamLead(Manager manager) {
 		this.manager = manager;
-		this.confRoom = confRoom;
-		this.developerStandUpBarrier = new CyclicBarrier(3);
+		
+		TeamLead me = this;
+		this.developerStandUpBarrier = new CyclicBarrier(3, new Runnable() {
+			@Override
+			public void run() {
+				ConferenceRoom.getReservation(me);
+				try {
+					Thread.sleep(15 * Time.MINUTE.getMillis());
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				ConferenceRoom.releaseReservation(me);
+			}
+		});
 	}
 
 	@Override
@@ -26,48 +36,19 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 
 		this.arrive();
 
-		// Tell the Manager they have arrived
+		// Tell the Manager They Have Arrived for the Stand Up Meeting
 		try {
 			manager.getStandUpBarrier().await();
 		} catch (InterruptedException | BrokenBarrierException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-
 
 		// Wait for their Developers to arrive
 		try {
 			developerStandUpBarrier.await();
 		} catch (InterruptedException | BrokenBarrierException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
-		try {
-			confRoom.getRes(this);
-			this.wait(15*Time.MINUTE.getMillis());
-			confRoom.relRes(this);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-	
-		// Try to get into Conference Room
-		// while conference room is busy
-		//		wait (people who leave conference room notify people)
-
-		// Meet for 15 Minutes
-		try {
-			Thread.sleep(15 * Time.MINUTE.getMillis());
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		// notifyAll?
-
 
 		// While the current time is before 4PM
 		while(Workday.getDelta() < Time.PM_FOUR.getMillis()) {
@@ -121,12 +102,12 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 	}
 
 	@Override
-	public void answerQuestion(Employee whoHasAQuestion) {
+	public void answerQuestion(Employee whoHasQuestion) {
 		if (rng.nextDouble() < 0.5) {
 			// TODO: go to PM office w/ developer
 
 			// Ask the Manager the Developer's Question
-			manager.answerQuestion(whoHasAQuestion);
+			manager.answerQuestion(whoHasQuestion);
 		}else{
 			try {
 				this.wait(10*Time.MINUTE.getMillis());

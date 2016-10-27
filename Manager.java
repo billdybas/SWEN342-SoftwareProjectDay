@@ -11,45 +11,42 @@ public class Manager extends Employee implements Knowledgeable {
 	private CyclicBarrier standUpBarrier;
 	private CyclicBarrier statusUpdateBarrier;
 	private boolean hasEatenLunch;
-	private boolean firstMeeting;
-	private boolean secondMeeting;
+	
+	public Manager() {
 
-	public Manager() {}
-
-	public Manager(List<Team> teams) {
-		if (teams.size() != 3) {
-			throw new IllegalArgumentException("The List of Teams Must Have Exactly 3 Teams");
-		}
-
-		this.teams = teams;
-		this.standUpBarrier = new CyclicBarrier(3, 
-				new Runnable() {
+		// The 3 TeamLead's Have to Arrive Before the Stand Up Meeting Begins
+		this.standUpBarrier = new CyclicBarrier(3, new Runnable() {
+			// Once Everyone Arrives, Meet for 15 Minutes
+			@Override
 			public void run(){
 				try {
-					this.wait(15 * Time.MINUTE.getMillis());
+					Thread.sleep(15 * Time.MINUTE.getMillis());
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
 		});
 		
-		this.statusUpdateBarrier = new CyclicBarrier(12,
-				new Runnable() {
+		// The 3 TeamLead's and 9 Developer's Have to Arrive Before the Status Update Meeting Begins
+		this.statusUpdateBarrier = new CyclicBarrier(12, new Runnable() {
+			// Once Everyone Arrives, Meet for 15 Minutes
+			@Override
 			public void run(){
 				try {
-					this.wait(15 * Time.MINUTE.getMillis());
+					Thread.sleep(15 * Time.MINUTE.getMillis());
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
 		});
 		
-		this.firstMeeting = false;
 		this.hasEatenLunch = false;
-		this.secondMeeting = false;
 	}
 
 	public void setTeams(List<Team> teams) {
+		if (teams.size() != 3) {
+			throw new IllegalArgumentException("The List of Teams Must Have Exactly 3 Teams");
+		}
 		this.teams = teams;
 	}
 
@@ -64,15 +61,6 @@ public class Manager extends Employee implements Knowledgeable {
 			System.out.println("Manager waits for Team Leads to arrive.");
 			this.standUpBarrier.await();
 		} catch (InterruptedException | BrokenBarrierException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		// Meet for 15 Minutes
-		try {
-			Thread.sleep(15 * Time.MINUTE.getMillis());
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -80,32 +68,28 @@ public class Manager extends Employee implements Knowledgeable {
 		while(Workday.getDelta() < Time.PM_FOUR.getMillis()) {
 			long delta = Workday.getDelta();
 
-			if (delta >= Time.PM_TWO.getMillis() && !this.secondMeeting) {
+			if (delta >= Time.PM_TWO.getMillis()) {
+				// After 2PM, the Manager Should Meet Until 3PM
 				try {
-					this.secondMeeting = true;
 					Thread.sleep(Time.PM_THREE.getMillis() - delta);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			} else if (delta >= Time.PM_TWELVE.getMillis() && !this.hasEatenLunch) {
-				try { 
-					this.hasEatenLunch = true;
-					Thread.sleep(Time.PM_ONE.getMillis() - delta);
-				} catch (InterruptedException e){
-					e.printStackTrace();
-				}
-			} else if (delta >= Time.AM_TEN.getMillis() && !this.firstMeeting) {
+				// After 12PM, the Manager Should Eat Lunch if He Hasn't Already
+				this.takeLunch();
+			} else if (delta >= Time.AM_TEN.getMillis()) {
+				// After 10AM, the Manager Should Meet Until 11AM
 				try {
-					this.firstMeeting = true;
 					Thread.sleep(Time.AM_ELEVEN.getMillis() - delta);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			} else if (this.waitingForAnswers.size() > 0) {
 				// Answer the question of the first Employee in the Queue
-				this.answerQuestion(this.waitingForAnswers.poll());
+				this.answerQuestion(this.waitingForAnswers.poll()); // TODO: Make sure employees in the Queue wait for their question to be answered
+			} else {
+				// TODO: Say that the Manager is Working
 			}
 		}
 
@@ -114,31 +98,10 @@ public class Manager extends Employee implements Knowledgeable {
 			System.out.println("Manager waits for Team Leads to arrive.");
 			this.statusUpdateBarrier.await();
 		} catch (InterruptedException | BrokenBarrierException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		this.leave();
-
-
-		// switch (currentTime)
-		// case 8AM
-		//	arrive at work
-		//  wait for leads to arrive
-		//	15 minute standup meeting
-		// case 10AM - 11AM
-		//  1 hr meeting
-		// case 12PM - 1PM (1 hour closest to this time after 12PM)
-		//  eat lunch
-		// case 2PM - 3PM
-		//  1 hr meeting
-		// case 4:15PM
-		//  15 minute meeting about project status
-		// case 5PM
-		//  leave (always last person out)
-		// default
-		//	work until questions are answered
-		//  (finishes answering questions and then goes to meetings or lunch)
 	}
 
 	public void knockOnDoor(Employee whoIsKnocking) {
@@ -156,29 +119,33 @@ public class Manager extends Employee implements Knowledgeable {
 	@Override
 	public void answerQuestion(Employee whoHasQuestion) {
 		// Answering a Question takes 10 minutes
-		System.out.println(Workday.getDelta()+"The Manager Answers the Question");
 		try {
-			this.wait(10*Time.MINUTE.getMillis());
+			this.wait(10 * Time.MINUTE.getMillis());
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	@Override
 	public void arrive() {
-		// First to arrive at 8 AM
+		// TODO: First to arrive at 8 AM
 
 	}
 
 	@Override
 	public void takeLunch() {
-		// Always takes an hour lunch starting closest to 12 - 1 PM
+		// Eating Lunch Always Takes an Hour
+		this.hasEatenLunch = true;
+		try {
+			Thread.sleep(Time.HOUR.getMillis());
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void leave() {
-		// Ensures that all employees have left
-		// Leaves at 5 PM
+		// TODO: Ensures that all employees have left
+		// TODO: Leaves at 5 PM
 	}
 }

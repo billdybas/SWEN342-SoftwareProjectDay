@@ -1,24 +1,33 @@
-import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ConferenceRoom {
 
-	private Queue<Employee> resList  = new LinkedList<>();
+	private static final ConferenceRoom instance = new ConferenceRoom();
 	
-	public ConferenceRoom(){
+	private static Queue<Employee> reservationList  = new ConcurrentLinkedQueue<>();
+	
+	private ConferenceRoom(){}
+	
+	public static ConferenceRoom getInstance() {
+		return instance;
 	}
 	
-	synchronized public void getRes(Employee e) throws InterruptedException{
-		resList.add(e);
-		while(true){
-			if(!resList.peek().equals(e)){
-				wait();
+	public static void getReservation(Employee whoWantsRoom) {
+		reservationList.add(whoWantsRoom);
+		while(true) {
+			if (!reservationList.peek().equals(whoWantsRoom)) {
+				try {
+					whoWantsRoom.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
 	
-	synchronized public void relRes(Employee e){
-		resList.poll();
-		notifyAll();
+	public static void releaseReservation(Employee whoHasRoom) {
+		reservationList.poll();
+		// TODO: notifyAll
 	}
 }
