@@ -25,13 +25,13 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 				ConferenceRoom.getReservation(me);
 				// Then, they meet for 15 min
 				try {
-					System.out.println(Workday.timeString(Workday.getDelta) + ": The team starts the meeting");
+					System.out.println(Workday.timeString(Workday.getDelta()) + ": The team starts the meeting");
 					Thread.sleep(15 * Time.MINUTE.getMillis());
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 				// Let other teams know the ConferenceRoom is available
-				System.out.println(Workday.timeString(Workday.getDelta) + ": The team leaves the conference room");
+				System.out.println(Workday.timeString(Workday.getDelta()) + ": The team leaves the conference room");
 				ConferenceRoom.releaseReservation(me);
 			}
 		});
@@ -62,15 +62,15 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 
 			// If at least 12PM and hasn't eaten lunch, take lunch
 			if (delta >= Time.PM_TWELVE.getMillis() && !this.hasEatenLunch) {
-				System.out.println(Workday.timeString(Workday.getDelta) + ": TeamLead takes lunch");
+				System.out.println(Workday.timeString(Workday.getDelta()) + ": TeamLead takes lunch");
 				this.takeLunch();
-				System.out.println(Workday.timeString(Workday.getDelta) + ": TeamLead comes back from lunch");
+				System.out.println(Workday.timeString(Workday.getDelta()) + ": TeamLead comes back from lunch");
 			} else if (this.waitingForAnswers.size() > 0) {
 				// Answer the question of the first Employee in the Queue
 				this.answerQuestion(this.waitingForAnswers.poll());
 			} else if (rng.nextDouble() < 0.1) {
 				// A Question is Asked 10% of the Time
-				System.out.println(Workday.timeString(Workday.getDelta) + ": TeamLead goes to the manager for a question");
+				System.out.println(Workday.timeString(Workday.getDelta()) + ": TeamLead goes to the manager for a question");
 				this.askQuestion();
 			} else {
 				// Otherwise, work
@@ -102,17 +102,17 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 		// 50% of the Time, the Team Lead Can't Answer the Question and has to Ask the Manager
 		if (rng.nextDouble() < 0.5) {
 			this.askQuestion();
-			System.out.println(Workday.timeString(Workday.getDelta) + ": TeamLead answers the question");
+			System.out.println(Workday.timeString(Workday.getDelta()) + ": TeamLead answers the question");
 		}
 
 		try {
 			// Answer the (Original) Question
-			System.out.println(Workday.timeString(Workday.getDelta) + ": TeamLead goes to the manager to ask a question");
+			System.out.println(Workday.timeString(Workday.getDelta()) + ": TeamLead goes to the manager to ask a question");
 			questionMeeting.await();
 		} catch (InterruptedException | BrokenBarrierException e) {
 			e.printStackTrace();
 		}
-		System.out.println(Workday.timeString(Workday.getDelta) + ": TeamLead comes back with an answer for the developer");
+		System.out.println(Workday.timeString(Workday.getDelta()) + ": TeamLead comes back with an answer for the developer");
 	}
 
 	@Override
@@ -121,9 +121,9 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 		CyclicBarrier managerQuestionMeeting = new CyclicBarrier(1, new Runnable() {
 			public void run(){
 				try {
-					System.out.println(Workday.timeString(Workday.getDelta) + ": Team lead asks the manager the question");
+					System.out.println(Workday.timeString(Workday.getDelta()) + ": Team lead asks the manager the question");
 					this.wait(10 * Time.MINUTE.getMillis());
-					System.out.println(Workday.timeString(Workday.getDelta) + ": Team lead leaves with their question answered");
+					System.out.println(Workday.timeString(Workday.getDelta()) + ": Team lead leaves with their question answered");
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

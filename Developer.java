@@ -20,21 +20,21 @@ public class Developer extends Employee implements Curious {
     	// Wait for the Stand Up to Start and then Meet for 15 min
     	try {
 			leader.getDeveloperStandUpBarrier().await();
-			System.out.println(Workday.timeString(Workday.getDelta) + ": Developer goes to Standup");
+			System.out.println(Workday.timeString(Workday.getDelta()) + ": Developer goes to Standup");
 		} catch (InterruptedException | BrokenBarrierException e) {
 			e.printStackTrace();
 		}
 
     	// Until 4PM, Normal Routine
-		System.out.println(Workday.timeString(Workday.getDelta) + ": Developer goes back to work");
+		System.out.println(Workday.timeString(Workday.getDelta()) + ": Developer goes back to work");
     	while(Workday.getDelta() < Time.PM_FOUR.getMillis()) {
     		long delta = Workday.getDelta();
 
     		// If at least 12PM and hasn't eaten lunch, take lunch
 			if (delta >= Time.PM_TWELVE.getMillis() && !this.hasEatenLunch) {
-				System.out.println(Workday.timeString(Workday.getDelta) + ": Developer takes lunch");
+				System.out.println(Workday.timeString(Workday.getDelta()) + ": Developer takes lunch");
 				this.takeLunch();
-				System.out.println(Workday.timeString(Workday.getDelta) + ": Developer comes back from lunch");
+				System.out.println(Workday.timeString(Workday.getDelta()) + ": Developer comes back from lunch");
 			} else if (rng.nextDouble() < 0.1) {
 				// A Question is Asked 10% of the Time
 				this.askQuestion();
@@ -47,14 +47,14 @@ public class Developer extends Employee implements Curious {
     	// Wait for the Status Update to Start and then Meet for 15 min
     	try {
 			this.leader.getManager().getStatusUpdateBarrier().await();
-			System.out.println(Workday.timeString(Workday.getDelta) + ": Employee goes to the conference room for status update");
+			System.out.println(Workday.timeString(Workday.getDelta()) + ": Employee goes to the conference room for status update");
 		} catch (InterruptedException | BrokenBarrierException e) {
 			e.printStackTrace();
 		}
 
     	// Leave for the Day
     	this.leave();
-    	System.out.println(Workday.timeString(Workday.getDelta) + ": Developer leaves for the day");
+    	System.out.println(Workday.timeString(Workday.getDelta()) + ": Developer leaves for the day");
     }
     
     @Override
