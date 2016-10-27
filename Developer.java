@@ -40,7 +40,7 @@ public class Developer extends Employee implements Curious {
 				this.askQuestion();
 			} else {
 				// Otherwise, work
-				System.out.println("Developer  " + this.id + "  works.");
+				System.out.println(Workday.timeString(Workday.getDelta())+ " Developer  " + this.id + "  works.");
 			}
     	}
 

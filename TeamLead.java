@@ -74,7 +74,7 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 				this.askQuestion();
 			} else {
 				// Otherwise, work
-				System.out.println("TeamLead" + this.id + " works.");
+				System.out.println(Workday.timeString(Workday.getDelta())+ " TeamLead" + this.id + " works.");
 			}
 		}
 
