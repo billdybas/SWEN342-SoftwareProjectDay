@@ -10,10 +10,10 @@ public class Main {
 		CountDownLatch latch = new CountDownLatch(1);
 		Manager manager = new Manager(latch);
 		for (int i = 0; i < 3; i++) {
-			leads[i] = new TeamLead(manager, i, latch);
+			leads[i] = new TeamLead(manager, i + 1, latch);
 
 			for (int j = 0; j < 3; j++) {
-					devs[j*i] = new Developer(leads[i], ((i*10)+j), latch);
+					devs[(j+1)*(i+1)] = new Developer(leads[i], (((i+1)*10)+(j+1)), latch);
 			}
 		}
 		(new Thread(manager)).start();
