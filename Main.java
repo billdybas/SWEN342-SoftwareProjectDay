@@ -13,7 +13,7 @@ public class Main {
 			leads[i] = new TeamLead(manager, i + 1, latch);
 
 			for (int j = 0; j < 3; j++) {
-					devs[(j+1)*(i+1)] = new Developer(leads[i], (((i+1)*10)+(j+1)), latch);
+					devs[j*i] = new Developer(leads[i], (((i+1)*10)+(j+1)), latch);
 			}
 		}
 		(new Thread(manager)).start();
