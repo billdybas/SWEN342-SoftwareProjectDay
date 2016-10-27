@@ -142,6 +142,17 @@ public class Manager extends Employee implements Knowledgeable {
 
 	@Override
 	public void leave() {
+		long delta = Workday.getDelta();
+		while(delta <= Time.PM_FIVE.getMillis()){
+			try {
+				this.wait(Time.PM_FIVE.getMillis() - delta);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		super.leave();
+		
 		// TODO: Ensures that all employees have left
 		// TODO: Leaves at 5 PM
 	}

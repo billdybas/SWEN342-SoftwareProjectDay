@@ -11,8 +11,9 @@ public enum Time {
 	PM_ONE(5* HOUR.getMillis()),
 	PM_TWO(6 * HOUR.getMillis()),
 	PM_THREE(7 * HOUR.getMillis()),
-	PM_FOUR(8 * HOUR.getMillis());
-
+	PM_FOUR(8 * HOUR.getMillis()),
+	PM_FIVE(9 * HOUR.getMillis());
+	
 	long millis;
 
 	Time(long millis) {
