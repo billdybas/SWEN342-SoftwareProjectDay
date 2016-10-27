@@ -3,7 +3,7 @@ import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class TeamLead extends Employee implements Knowledgeable, Curious {
+public class TeamLead extends Employee implements Curious {
 
 	private Manager manager;
 	private Random rng = new Random();
@@ -17,7 +17,7 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 	public TeamLead(Manager manager) {
 		this.manager = manager;
 		
-		TeamLead me = this;
+		final TeamLead me = this;
 		this.developerStandUpBarrier = new CyclicBarrier(3, new Runnable() {
 			@Override
 			public void run() {
@@ -58,15 +58,11 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 			if (delta >= Time.PM_TWELVE.getMillis() && !this.hasEatenLunch) {
 				try {
 					this.hasEatenLunch = true;
-					Thread.sleep(ThreadLocalRandom.nextInt(Time.MINUTE.ms() * 3, Time.HOUR.ms() + 1));
+					Thread.sleep(ThreadLocalRandom.nextInt(Time.MINUTE.getMillis() * 30, Time.HOUR.getMillis() + 1));
 				} catch (InterruptedException e){
 					e.printStackTrace();
 				}
-			} else if (this.waitingForAnswers.size() > 0) {
-				// Answer the question of the first Employee in the Queue
-				this.answerQuestion(this.waitingForAnswers.poll());
 			}
-		}
 
 		// TODO: Copy Manager logic for taking lunch and answering Developer Questions
 		// Lunch will be random and happen once
@@ -102,15 +98,35 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 		return this.manager;
 	}
 
-	@Override
 	public void answerQuestion(Employee whoHasQuestion) {
 		if (rng.nextDouble() < 0.5) {
 			// TODO: go to PM office w/ developer
 
+			CyclicBarrier questionMeeting = new CyclicBarrier(2,
+					new Runnable() {
+				public void run(){
+					try {
+						this.wait(10 * Time.MINUTE.getMillis());
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			
 			// Ask the Manager the Developer's Question
-			manager.answerQuestion(whoHasQuestion);
+			manager.knockOnDoor(questionMeeting);
+			try {
+				questionMeeting.await();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch( BrokenBarrierException e){
+				System.out.println("X saves their question for a different day");
+			}
+
 		}else{
 			try {
+				//takes 10 min to answer question
 				this.wait(10*Time.MINUTE.getMillis());
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -125,7 +141,24 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 	public void askQuestion() {
 		// TODO: go to PM office to ask question
 
-		// Ask the Manager a Question
-		manager.answerQuestion(this);
+		CyclicBarrier questionMeeting = new CyclicBarrier(2,
+				new Runnable() {
+			public void run(){
+				try {
+					this.wait(10 * Time.MINUTE.getMillis());
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
+		// Ask the Manager the Developer's Question
+		manager.knockOnDoor(questionMeeting);
+		try {
+			questionMeeting.await();
+		} catch (InterruptedException | BrokenBarrierException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
