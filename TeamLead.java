@@ -18,7 +18,7 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 		
 		final TeamLead me = this;
 		// A TeamLead's 3 Developers Have to Arrive Before the Stand Up Begins
-		this.developerStandUpBarrier = new CyclicBarrier(4, new Runnable() {
+		this.developerStandUpBarrier = new CyclicBarrier(3, new Runnable() {
 			@Override
 			public void run() {
 				// They wait for the ConferenceRoom to be available
@@ -118,7 +118,7 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 	@Override
 	public void askQuestion() {
 		// Questions Asked to the Manager take 10 min
-		CyclicBarrier managerQuestionMeeting = new CyclicBarrier(2, new Runnable() {
+		CyclicBarrier managerQuestionMeeting = new CyclicBarrier(1, new Runnable() {
 			public void run(){
 				try {
 					System.out.println(Workday.timeString(Workday.getDelta()) + ": Team lead asks the manager the question");
