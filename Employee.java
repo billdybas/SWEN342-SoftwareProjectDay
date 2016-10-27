@@ -8,6 +8,7 @@ public abstract class Employee implements Runnable {
 	protected Random rng = new Random();
 	protected int id;
 	protected CountDownLatch latch;
+	protected long timeArrived;
 
 	public boolean isInFirm() {
 		return isEmployeeInFirm;
@@ -27,13 +28,14 @@ public abstract class Employee implements Runnable {
 			e.printStackTrace();
 		}
 		this.isEmployeeInFirm = true;
+		timeArrived = Workday.getDelta();
 	}
 
 	public void takeLunch() {
 		this.hasEatenLunch = true;
 		try {
-			// Take Lunch for a Random Amount of Time Between 30 min and 1 Hour
-			Thread.sleep(rng.nextInt((int)(Time.HOUR.getMillis() - Time.HALF_HOUR.getMillis())) + Time.HALF_HOUR.getMillis());
+			// Takes Lunch for a Random Amount of Time Between 30 min and 1 Hour
+			Thread.sleep(rng.nextInt((int)((Time.HOUR.getMillis() - timeArrived )- Time.HALF_HOUR.getMillis())) + Time.HALF_HOUR.getMillis());
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
