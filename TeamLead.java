@@ -22,10 +22,12 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 			public void run() {
 				ConferenceRoom.getReservation(me);
 				try {
+					System.out.println(Workday.timeString(getDelta) + ": The team starts the meeting");
 					Thread.sleep(15 * Time.MINUTE.getMillis());
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+				System.out.println(Workday.timeString(getDelta) + ": The team leaves the conference room");
 				ConferenceRoom.releaseReservation(me);
 			}
 		});
@@ -55,12 +57,15 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 			long delta = Workday.getDelta();
 
 			if (delta >= Time.PM_TWELVE.getMillis() && !this.hasEatenLunch) {
+				System.out.println(Workday.timeString(getDelta) + ": TeamLead takes lunch");
 				this.takeLunch();
+				System.out.println(Workday.timeString(getDelta) + ": TeamLead comes back from lunch");
 			} else if (this.waitingForAnswers.size() > 0) {
 				// Answer the question of the first Employee in the Queue
 				this.answerQuestion(this.waitingForAnswers.poll());
 			} else if (rng.nextDouble() < 0.1) {
 				// A Question is Asked 10% of the Time
+				System.out.println(Workday.timeString(getDelta) + ": TeamLead goes to the manager for a question");
 				this.askQuestion();
 			} else {
 				System.out.println("TeamLead X works.");
@@ -87,14 +92,17 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 	public void answerQuestion(CyclicBarrier questionMeeting) {
 		if (rng.nextDouble() < 0.5) {
 			this.askQuestion();
+			System.out.println(Workday.timeString(getDelta) + ": TeamLead answers the question");
 		}
 
 		try {
+			System.out.println(Workday.timeString(getDelta) + ": TeamLead goes to the manager to ask a question");
 			// Answer the Question
 			questionMeeting.await();
 		} catch (InterruptedException | BrokenBarrierException e) {
 			e.printStackTrace();
 		}
+		System.out.println(Workday.timeString(getDelta) + ": TeamLead comes back with an answer for the developer");
 	}
 
 	@Override
@@ -102,12 +110,15 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 		CyclicBarrier managerQuestionMeeting = new CyclicBarrier(1, new Runnable() {
 			public void run(){
 				try {
+					System.out.println(Workday.timeString(getDelta) + ": Team lead asks the manager the question");
 					this.wait(10 * Time.MINUTE.getMillis());
+					System.out.println(Workday.timeString(getDelta) + ": Team lead leaves with their question answered");
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
 		});
+
 
 		// Ask the Manager a Question
 		manager.knockOnDoor(managerQuestionMeeting);
