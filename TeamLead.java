@@ -9,8 +9,8 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 	private Manager manager;
 	private Queue<CyclicBarrier> waitingForAnswers = new ConcurrentLinkedQueue<CyclicBarrier>();
 	private CyclicBarrier developerStandUpBarrier;
-	private boolean hasEatenLunch;
-
+	private boolean hasMetWithManager = false;
+	
 	public TeamLead(Manager manager, int id, CountDownLatch latch) {
 		this.manager = manager;
 		this.id = id;
@@ -48,6 +48,8 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 		} catch (InterruptedException | BrokenBarrierException e) {
 			e.printStackTrace();
 		}
+		
+		this.hasMetWithManager = true;
 
 		// Wait for their Developers to Arrive and then Meet for 15 min
 		try {
@@ -78,6 +80,8 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 			}
 		}
 
+		while(!this.manager.readyForStatusMeeting()) {}
+		
 		// Wait for the Status Update to Start and then Meet for 15 min
 		try {
 			manager.getStatusUpdateBarrier().await();
@@ -95,6 +99,10 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 
 	public Manager getManager() {
 		return this.manager;
+	}
+	
+	public boolean hasMetWithManager() {
+		return this.hasMetWithManager;
 	}
 
 	@Override

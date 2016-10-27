@@ -17,6 +17,10 @@ public class Developer extends Employee implements Curious {
     	// Arrive at the Office
     	this.arrive();
 
+    	while(!leader.isInFirm() && !leader.hasMetWithManager()) {
+    		System.out.println(Workday.timeString(Workday.getDelta()) + ": Developer " + this.id + " waits for their TeamLead to arrive");
+    	}
+    	
     	// Wait for the Stand Up to Start and then Meet for 15 min
     	try {
 			System.out.println(Workday.timeString(Workday.getDelta()) + ": Developer " + this.id + " goes to Standup");
@@ -40,9 +44,11 @@ public class Developer extends Employee implements Curious {
 				this.askQuestion();
 			} else {
 				// Otherwise, work
-				System.out.println(Workday.timeString(Workday.getDelta()) + " Developer " + this.id + " works.");
+				System.out.println(Workday.timeString(Workday.getDelta()) + ": Developer " + this.id + " works.");
 			}
     	}
+    	
+    	while(!this.leader.getManager().readyForStatusMeeting()) {}
 
     	// Wait for the Status Update to Start and then Meet for 15 min
     	try {

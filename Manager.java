@@ -10,13 +10,12 @@ public class Manager extends Employee implements Knowledgeable {
 	private CyclicBarrier standUpBarrier;
 	private CyclicBarrier statusUpdateBarrier;
 	private CountDownLatch latch;
-	private boolean firstMeeting;
-	private boolean secondMeeting;
+	private boolean firstMeeting = false;
+	private boolean secondMeeting = false;
+	private boolean readyForStatusMeeting = false;
 	
 	public Manager(CountDownLatch latch) {
 		this.latch = latch;
-		this.firstMeeting = false;
-		this.secondMeeting = false;
 		
 		// The 3 TeamLead's Have to Arrive Before the Stand Up Meeting Begins
 		this.standUpBarrier = new CyclicBarrier(4, new Runnable() {
@@ -111,6 +110,8 @@ public class Manager extends Employee implements Knowledgeable {
 			question.reset();
 		}
 		
+		this.readyForStatusMeeting = true;
+		
 		// Wait for all Members to arrive
 		try {
 			System.out.println(Workday.timeString(Workday.getDelta()) + ": The Manager waits for everyone to arrive to the status meeting.");
@@ -137,6 +138,10 @@ public class Manager extends Employee implements Knowledgeable {
 
 	public CyclicBarrier getStatusUpdateBarrier() {
 		return this.statusUpdateBarrier;
+	}
+	
+	public boolean readyForStatusMeeting() {
+		return this.readyForStatusMeeting;
 	}
 
 	@Override
