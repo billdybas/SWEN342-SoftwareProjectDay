@@ -19,8 +19,8 @@ public class Developer extends Employee implements Curious {
 
     	// Wait for the Stand Up to Start and then Meet for 15 min
     	try {
-			leader.getDeveloperStandUpBarrier().await();
 			System.out.println(Workday.timeString(Workday.getDelta()) + ": Developer  " + this.id + " goes to Standup");
+			leader.getDeveloperStandUpBarrier().await();
 		} catch (InterruptedException | BrokenBarrierException e) {
 			e.printStackTrace();
 		}
