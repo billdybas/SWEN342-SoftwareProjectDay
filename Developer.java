@@ -15,31 +15,25 @@ public class Developer extends Employee implements Curious {
     	try {
 			leader.getDeveloperStandUpBarrier().await();
 		} catch (InterruptedException | BrokenBarrierException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+    	
+    	while(Workday.getDelta() < Time.PM_FOUR.getMillis()) {
+    		long delta = Workday.getDelta();
 
-    	// TODO: Loop until 4
-    	// Copy Manager-esque stuff
-    	// Take Lunch
-    	// Randomly Ask Question to TeamLead
-    	// 'Code'
+			if (delta >= Time.PM_TWELVE.getMillis() && !this.hasEatenLunch) { // TODO: Can they take their lunch break before 12PM?
+				this.takeLunch();
+			} else {
+				// TODO: Randomly ask a question to the TeamLead
+				// TODO: Say that working
+			}
+    	}
 
     	try {
 			this.leader.getManager().getStatusUpdateBarrier().await();
 		} catch (InterruptedException | BrokenBarrierException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		
-
-        // 1. Arrive
-        // 2. Wait for TeamLead to say to go to the meeting
-        // 3. Wait for the Conference Room
-        // 4. Meet w/ Team for 15 min
-        // 5. Work w/ Randomly Asked Questions
-        // TODO
     }
 
   @Override

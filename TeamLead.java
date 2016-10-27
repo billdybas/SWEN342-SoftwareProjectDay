@@ -1,19 +1,15 @@
-import java.util.Random;
+import java.util.Queue;
 import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class TeamLead extends Employee implements Knowledgeable, Curious {
 
 	private Manager manager;
-	private Random rng = new Random();
+	private Queue<Employee> waitingForAnswers = new ConcurrentLinkedQueue<Employee>();
 	private CyclicBarrier developerStandUpBarrier;
 	private boolean hasEatenLunch;
-	
-	public TeamLead(){
 		
-	}
-	
 	public TeamLead(Manager manager) {
 		this.manager = manager;
 		
@@ -55,23 +51,16 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 		while(Workday.getDelta() < Time.PM_FOUR.getMillis()) {
 			long delta = Workday.getDelta();
 
-			if (delta >= Time.PM_TWELVE.getMillis() && !this.hasEatenLunch) {
-				try {
-					this.hasEatenLunch = true;
-					Thread.sleep(ThreadLocalRandom.nextInt(Time.MINUTE.ms() * 3, Time.HOUR.ms() + 1));
-				} catch (InterruptedException e){
-					e.printStackTrace();
-				}
+			if (delta >= Time.PM_TWELVE.getMillis() && !this.hasEatenLunch) { // TODO: Can they take their lunch break before 12PM?
+				this.takeLunch();
 			} else if (this.waitingForAnswers.size() > 0) {
 				// Answer the question of the first Employee in the Queue
-				this.answerQuestion(this.waitingForAnswers.poll());
+				this.answerQuestion(this.waitingForAnswers.poll()); // TODO: Make sure employees in the Queue wait for their question to be answered
+			} else {
+				// TODO: Randomly ask a question to the Manager
+				// TODO: Say that working
 			}
 		}
-
-		// TODO: Copy Manager logic for taking lunch and answering Developer Questions
-		// Lunch will be random and happen once
-		// Lunch >= 30 min && < 60 min
-		// Randomly ask question to manager
 
 		try {
 			manager.getStatusUpdateBarrier().await();
@@ -80,16 +69,6 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 			e.printStackTrace();
 		}
 
-		// Meet for 15 Minutes
-		try {
-			Thread.sleep(15 * Time.MINUTE.getMillis());
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-
-		// When they arrive, knock on Manager door and do 15 minute meeting
 		// After meeting, wait for conference room and all developers on same team present, enter room and have 15 minute meeting
 
 	}
@@ -109,13 +88,6 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 
 			// Ask the Manager the Developer's Question
 			manager.answerQuestion(whoHasQuestion);
-		}else{
-			try {
-				this.wait(10*Time.MINUTE.getMillis());
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 
 		// TODO: return to work

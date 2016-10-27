@@ -2,6 +2,7 @@
 public enum Time {
 
 	MINUTE(10),
+	HALF_HOUR(30 * MINUTE.getMillis()),
 	HOUR(60 * MINUTE.getMillis()),
 	WORKDAY(9 * HOUR.getMillis()),
 	AM_TEN(2 * HOUR.getMillis()),

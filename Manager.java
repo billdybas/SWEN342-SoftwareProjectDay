@@ -1,4 +1,3 @@
-import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -6,11 +5,9 @@ import java.util.concurrent.CyclicBarrier;
 
 public class Manager extends Employee implements Knowledgeable {
 
-	private List<Team> teams;
 	private Queue<Employee> waitingForAnswers = new ConcurrentLinkedQueue<Employee>();
 	private CyclicBarrier standUpBarrier;
 	private CyclicBarrier statusUpdateBarrier;
-	private boolean hasEatenLunch;
 	
 	public Manager() {
 
@@ -39,15 +36,6 @@ public class Manager extends Employee implements Knowledgeable {
 				}
 			}
 		});
-		
-		this.hasEatenLunch = false;
-	}
-
-	public void setTeams(List<Team> teams) {
-		if (teams.size() != 3) {
-			throw new IllegalArgumentException("The List of Teams Must Have Exactly 3 Teams");
-		}
-		this.teams = teams;
 	}
 
 	@Override
@@ -129,7 +117,6 @@ public class Manager extends Employee implements Knowledgeable {
 	@Override
 	public void arrive() {
 		// TODO: First to arrive at 8 AM
-
 	}
 
 	@Override

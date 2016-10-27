@@ -7,7 +7,6 @@ public class Main {
 
 		Manager manager = new Manager();
 
-		List<Team> teams = new ArrayList<Team>();
 		for (int i = 0; i < 3; i++) {
 			TeamLead leader = new TeamLead(manager);
 
@@ -16,9 +15,6 @@ public class Main {
 					developers.add(new Developer(leader));
 			}
 
-			teams.add(new Team(leader, developers));
 		}
-
-		manager.setTeams(teams);
 	}
 }
