@@ -6,7 +6,7 @@ public class ConferenceRoom {
 	// ConferenceRoom is a Singleton
 	private static final ConferenceRoom instance = new ConferenceRoom();
 	// Queue of Employees Waiting to Use the ConferenceRoom
-	private static Queue<Employee> reservationList  = new ConcurrentLinkedQueue<>();
+	private static Queue<Employee> reservationList  = new ConcurrentLinkedQueue<Employee>();
 	
 	private ConferenceRoom(){}
 	
