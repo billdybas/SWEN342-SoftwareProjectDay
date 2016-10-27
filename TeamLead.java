@@ -63,7 +63,7 @@ public class TeamLead extends Employee implements Curious {
 					e.printStackTrace();
 				}
 			}
-
+		}
 		// TODO: Copy Manager logic for taking lunch and answering Developer Questions
 		// Lunch will be random and happen once
 		// Lunch >= 30 min && < 60 min
@@ -83,6 +83,7 @@ public class TeamLead extends Employee implements Curious {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 
 
 		// When they arrive, knock on Manager door and do 15 minute meeting
