@@ -10,11 +10,15 @@ public class Manager extends Employee implements Knowledgeable {
 	private CyclicBarrier standUpBarrier;
 	private CyclicBarrier statusUpdateBarrier;
 	private CountDownLatch latch;
+	private boolean firstMeeting;
+	private boolean secondMeeting;
 	
 	public Manager(CountDownLatch latch) {
 		this.latch = latch;
+		this.firstMeeting = false;
+		this.secondMeeting = false;
 		// The 3 TeamLead's Have to Arrive Before the Stand Up Meeting Begins
-		this.standUpBarrier = new CyclicBarrier(3, new Runnable() {
+		this.standUpBarrier = new CyclicBarrier(4, new Runnable() {
 			// Once Everyone Arrives, Meet for 15 Minutes
 			@Override
 			public void run(){
@@ -28,7 +32,7 @@ public class Manager extends Employee implements Knowledgeable {
 		});
 		
 		// The 3 TeamLead's and 9 Developer's Have to Arrive Before the Status Update Meeting Begins
-		this.statusUpdateBarrier = new CyclicBarrier(12, new Runnable() {
+		this.statusUpdateBarrier = new CyclicBarrier(13, new Runnable() {
 			// Once Everyone Arrives, Meet for 15 Minutes
 			@Override
 			public void run(){
@@ -61,11 +65,14 @@ public class Manager extends Employee implements Knowledgeable {
 		while(Workday.getDelta() < Time.PM_FOUR.getMillis()) {
 			long delta = Workday.getDelta();
 
-			if (delta >= Time.PM_TWO.getMillis()) {
+			if (delta >= Time.PM_TWO.getMillis() && !this.secondMeeting) {
 				// After 2PM, the Manager Should Meet Until 3PM
 				try {
-					System.out.println(Workday.timeString(delta)+": The manager has his 2PM meeting");
-					Thread.sleep(Time.PM_THREE.getMillis() - delta);
+					synchronized(this){
+						System.out.println(Workday.timeString(delta)+": The manager has his 2PM meeting");
+						this.secondMeeting = true;
+						Thread.sleep(Time.PM_THREE.getMillis() - delta);
+					}
 
 					System.out.println("The manager stays in the meeting until " + Workday.timeString(delta));
 				} catch (InterruptedException e) {
@@ -74,12 +81,15 @@ public class Manager extends Employee implements Knowledgeable {
 			} else if (delta >= Time.PM_TWELVE.getMillis() && !this.hasEatenLunch) {
 				// After 12PM, the Manager Should Eat Lunch if He Hasn't Already
 				this.takeLunch();
-			} else if (delta >= Time.AM_TEN.getMillis()) {
+			} else if (delta >= Time.AM_TEN.getMillis() && !this.firstMeeting) {
 				// After 10AM, the Manager Should Meet Until 11AM
 				try {
-					System.out.println(Workday.timeString(delta)+": The manager has his 10AM meeting");
-					Thread.sleep(Time.AM_ELEVEN.getMillis() - delta);
-					System.out.println("The Manager stays in the meeting until " + Workday.timeString(delta));
+					synchronized(this){
+						System.out.println(Workday.timeString(delta)+": The manager has his 10AM meeting");
+						this.firstMeeting = true;
+						Thread.sleep(Time.AM_ELEVEN.getMillis() - delta);
+						System.out.println("The Manager stays in the meeting until " + Workday.timeString(delta));
+					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -88,6 +98,12 @@ public class Manager extends Employee implements Knowledgeable {
 				this.answerQuestion(this.waitingForAnswers.poll());
 			} else {
 				System.out.println(Workday.timeString(Workday.getDelta())+": The manager browses WOOT.com");
+				try {
+					Thread.sleep(Time.MINUTE.getMillis());
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 
