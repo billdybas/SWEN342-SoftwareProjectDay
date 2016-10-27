@@ -46,7 +46,7 @@ public class Manager extends Employee implements Knowledgeable {
 		// Arrive at 8AM
 		this.arrive();
 
-		// Wait for all Team Leads to arrive
+		// Wait for all Team Leads to Arrive, then Meet
 		try {
 			System.out.println("Manager waits for Team Leads to arrive.");
 			this.standUpBarrier.await();
@@ -54,7 +54,7 @@ public class Manager extends Employee implements Knowledgeable {
 			e.printStackTrace();
 		}
 
-		// While the current time is before 4PM
+		// While the current time is before 4PM, Do Normal Routine
 		while(Workday.getDelta() < Time.PM_FOUR.getMillis()) {
 			long delta = Workday.getDelta();
 
@@ -98,9 +98,14 @@ public class Manager extends Employee implements Knowledgeable {
 			e.printStackTrace();
 		}
 
+		// Leave for the Day
 		this.leave();
 	}
 
+	/**
+	 * Indicate to the Manager that Waiting for the Answer to a Question
+	 * @param questionMeeting
+	 */
 	public void knockOnDoor(CyclicBarrier questionMeeting) {
 		this.waitingForAnswers.add(questionMeeting);
 	}
@@ -144,7 +149,7 @@ public class Manager extends Employee implements Knowledgeable {
 	@Override
 	public void leave() {
 		long delta = Workday.getDelta();
-		while(delta <= Time.PM_FIVE.getMillis()){
+		while(delta <= Time.PM_FIVE.getMillis()){ // TODO: Do we need a loop here?
 			try {
 				Thread.sleep(Time.PM_FIVE.getMillis() - delta);
 			} catch (InterruptedException e) {

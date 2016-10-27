@@ -12,7 +12,7 @@ public abstract class Employee implements Runnable {
 	}
 
 	public void arrive() {
-		// Randomly Sleep Between 0 and 30 Minutes, and then arrive
+		// Randomly Sleep Between 0 and 30 Minutes, and then Arrive
 		try {
 			Thread.sleep(rng.nextInt((int)(Time.HALF_HOUR.getMillis())));
 		} catch (InterruptedException e) {
@@ -24,7 +24,7 @@ public abstract class Employee implements Runnable {
 	public void takeLunch() {
 		this.hasEatenLunch = true;
 		try {
-			// Takes Lunch for a Random Amount of Time Between 30 min and 1 Hour
+			// Take Lunch for a Random Amount of Time Between 30 min and 1 Hour
 			Thread.sleep(rng.nextInt((int)(Time.HOUR.getMillis() - Time.HALF_HOUR.getMillis())) + Time.HALF_HOUR.getMillis());
 		} catch (InterruptedException e) {
 			e.printStackTrace();

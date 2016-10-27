@@ -1,6 +1,8 @@
 
 public class Workday {
+	// Workday is a Singleton
 	private static final Workday instance = new Workday();
+	// The time when this program started
 	private static long startTimeMillis;
 
 	private Workday() {
@@ -11,10 +13,17 @@ public class Workday {
 		return instance;
 	}
 
+	/**
+	 * @return How Much Time Has Elapsed Since Program Start
+	 */
 	public static long getDelta() {
 		return System.currentTimeMillis() - startTimeMillis;
 	}
 
+	/**
+	 * @param time - Time to Format
+	 * @return Formatted Workday Time - XX:XX AM/PM
+	 */
 	public static String timeString(long time) {
 		String amOrPm; //AM or PM
 		String hourString;

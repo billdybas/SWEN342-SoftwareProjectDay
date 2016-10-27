@@ -14,15 +14,19 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 		this.manager = manager;
 
 		final TeamLead me = this;
+		// A TeamLead's 3 Developers Have to Arrive Before the Stand Up Begins
 		this.developerStandUpBarrier = new CyclicBarrier(3, new Runnable() {
 			@Override
 			public void run() {
+				// They wait for the ConferenceRoom to be available
 				ConferenceRoom.getReservation(me);
+				// Then, they meet for 15 min
 				try {
 					Thread.sleep(15 * Time.MINUTE.getMillis());
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+				// Let other teams know the ConferenceRoom is available
 				ConferenceRoom.releaseReservation(me);
 			}
 		});
@@ -30,27 +34,28 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 
 	@Override
 	public void run() {
-
+		// Arrive at the Office
 		this.arrive();
 
-		// Tell the Manager They Have Arrived for the Stand Up Meeting
+		// Tell the Manager They Have Arrived for the Stand Up Meeting and then Meet for 15 min
 		try {
 			manager.getStandUpBarrier().await();
 		} catch (InterruptedException | BrokenBarrierException e) {
 			e.printStackTrace();
 		}
 
-		// Wait for their Developers to arrive
+		// Wait for their Developers to Arrive and then Meet for 15 min
 		try {
 			developerStandUpBarrier.await();
 		} catch (InterruptedException | BrokenBarrierException e1) {
 			e1.printStackTrace();
 		}
 
-		// While the current time is before 4PM
+		// While the current time is before 4PM, Do Normal Routine
 		while(Workday.getDelta() < Time.PM_FOUR.getMillis()) {
 			long delta = Workday.getDelta();
 
+			// If at least 12PM and hasn't eaten lunch, take lunch
 			if (delta >= Time.PM_TWELVE.getMillis() && !this.hasEatenLunch) {
 				this.takeLunch();
 			} else if (this.waitingForAnswers.size() > 0) {
@@ -60,16 +65,19 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 				// A Question is Asked 10% of the Time
 				this.askQuestion();
 			} else {
+				// Otherwise, work
 				System.out.println("TeamLead X works.");
 			}
 		}
 
+		// Wait for the Status Update to Start and then Meet for 15 min
 		try {
 			manager.getStatusUpdateBarrier().await();
 		} catch (InterruptedException | BrokenBarrierException e) {
 			e.printStackTrace();
 		}
 
+    	// Leave for the Day
 		this.leave();
 	}
 
@@ -81,13 +89,15 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 		return this.manager;
 	}
 
+	@Override
 	public void answerQuestion(CyclicBarrier questionMeeting) {
+		// 50% of the Time, the Team Lead Can't Answer the Question and has to Ask the Manager
 		if (rng.nextDouble() < 0.5) {
 			this.askQuestion();
 		}
 
 		try {
-			// Answer the Question
+			// Answer the (Original) Question
 			questionMeeting.await();
 		} catch (InterruptedException | BrokenBarrierException e) {
 			e.printStackTrace();
@@ -96,6 +106,7 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 
 	@Override
 	public void askQuestion() {
+		// Questions Asked to the Manager take 10 min
 		CyclicBarrier managerQuestionMeeting = new CyclicBarrier(1, new Runnable() {
 			public void run(){
 				try {
@@ -110,6 +121,7 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 		manager.knockOnDoor(managerQuestionMeeting);
 
 		try {
+			// Wait for Manager's Response
 			managerQuestionMeeting.await();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
