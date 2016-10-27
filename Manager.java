@@ -19,8 +19,8 @@ public class Manager extends Employee implements Knowledgeable {
 			@Override
 			public void run(){
 				try {
+					System.out.println(Workday.timeString(Workday.getDelta())+": the manager leads stand-up meeting");
 					Thread.sleep(15 * Time.MINUTE.getMillis());
-					System.out.println("The team leads and the Manager have their standup until " + Workday.timeString(Workday.getDelta()));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -33,8 +33,9 @@ public class Manager extends Employee implements Knowledgeable {
 			@Override
 			public void run(){
 				try {
+					System.out.println(Workday.timeString(Workday.getDelta())+": The firm gives a status update to the manager");
+
 					Thread.sleep(15 * Time.MINUTE.getMillis());
-					System.out.println("The firm gives a status update to the manager");
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -50,7 +51,7 @@ public class Manager extends Employee implements Knowledgeable {
 
 		// Wait for all Team Leads to Arrive, then Meet
 		try {
-			System.out.println("Manager waits for Team Leads to arrive.");
+			System.out.println(Workday.timeString(Workday.getDelta())+": the manager waits for Team Leads to arrive.");
 			this.standUpBarrier.await();
 		} catch (InterruptedException | BrokenBarrierException e) {
 			e.printStackTrace();
@@ -63,9 +64,10 @@ public class Manager extends Employee implements Knowledgeable {
 			if (delta >= Time.PM_TWO.getMillis()) {
 				// After 2PM, the Manager Should Meet Until 3PM
 				try {
+					System.out.println(Workday.timeString(delta)+": The manager has his 2PM meeting");
 					Thread.sleep(Time.PM_THREE.getMillis() - delta);
 
-					System.out.println("The Manager stays in the meeting until " + Workday.timeString(Workday.getDelta()));
+					System.out.println("The manager stays in the meeting until " + Workday.timeString(delta));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -75,7 +77,9 @@ public class Manager extends Employee implements Knowledgeable {
 			} else if (delta >= Time.AM_TEN.getMillis()) {
 				// After 10AM, the Manager Should Meet Until 11AM
 				try {
+					System.out.println(Workday.timeString(delta)+": The manager has his 10AM meeting");
 					Thread.sleep(Time.AM_ELEVEN.getMillis() - delta);
+					System.out.println("The Manager stays in the meeting until " + Workday.timeString(delta));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -83,7 +87,7 @@ public class Manager extends Employee implements Knowledgeable {
 				// Answer the question of the first Employee in the Queue
 				this.answerQuestion(this.waitingForAnswers.poll());
 			} else {
-				// TODO: Say that the Manager is Working
+				System.out.println(Workday.timeString(Workday.getDelta())+": The manager browses WOOT.com");
 			}
 		}
 
@@ -94,7 +98,7 @@ public class Manager extends Employee implements Knowledgeable {
 		
 		// Wait for all Members to arrive
 		try {
-			System.out.println("Manager waits for Everyone to arrive.");
+			System.out.println(Workday.timeString(Workday.getDelta())+": the manager waits for everyone to arrive.");
 			this.statusUpdateBarrier.await();
 		} catch (InterruptedException | BrokenBarrierException e) {
 			e.printStackTrace();
@@ -124,6 +128,7 @@ public class Manager extends Employee implements Knowledgeable {
 	public void answerQuestion(CyclicBarrier questionMeeting) {
 		// Answering a Question takes 10 minutes
 		try {
+			System.out.println(Workday.timeString(Workday.getDelta())+": the manager answers a question");
 			questionMeeting.await();
 		} catch (InterruptedException | BrokenBarrierException e) {
 			e.printStackTrace();
@@ -133,7 +138,7 @@ public class Manager extends Employee implements Knowledgeable {
 	@Override
 	public void arrive() {
 		// TODO: First to arrive at 8 AM
-		System.out.println("The manager arrives at the firm at 8:00am");
+		System.out.println(Workday.timeString(Workday.getDelta())+": The manager arrives at the firm at 8:00am");
 		latch.countDown();
 		// TODO: Open latch for all other employees to arrive
 	}
@@ -143,6 +148,7 @@ public class Manager extends Employee implements Knowledgeable {
 		// Eating Lunch Always Takes an Hour
 		this.hasEatenLunch = true;
 		try {
+			System.out.println(Workday.timeString(Workday.getDelta())+": Manager takes his hour lunch break");
 			Thread.sleep(Time.HOUR.getMillis());
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -159,6 +165,7 @@ public class Manager extends Employee implements Knowledgeable {
 				e.printStackTrace();
 			}
 		}
+		System.out.println(Workday.timeString(Workday.getDelta())+": the manager leaves for the day");
 		super.leave();
 	}
 }
