@@ -1,4 +1,5 @@
 import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
 public class Developer extends Employee implements Curious {
     private TeamLead leader;
@@ -17,7 +18,7 @@ public class Developer extends Employee implements Curious {
 		} catch (InterruptedException | BrokenBarrierException e) {
 			e.printStackTrace();
 		}
-    	
+
     	while(Workday.getDelta() < Time.PM_FOUR.getMillis()) {
     		long delta = Workday.getDelta();
 
@@ -34,13 +35,22 @@ public class Developer extends Employee implements Curious {
 		} catch (InterruptedException | BrokenBarrierException e) {
 			e.printStackTrace();
 		}
-    	
+
     	this.leave();
     }
 
   @Override
   public void askQuestion() {
       // Ask the Team Lead a Question
-      leader.answerQuestion(this); // TODO: Change to Barrier
+
+	  CyclicBarrier questionMeeting = new CyclicBarrier(1);
+
+      leader.answerQuestion(questionMeeting);
+
+      try {
+		questionMeeting.await();
+	} catch (InterruptedException | BrokenBarrierException e) {
+		e.printStackTrace();
+	}
   }
 }
