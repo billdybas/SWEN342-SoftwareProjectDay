@@ -15,3 +15,7 @@
 * When not answering questions, at meetings, or at lunch, the manager does whatever it is managers do (looking for deals on Woot!, reading blogs, thinking of ways to make the developers' lives miserable, etc.)
 * When developers ask the team lead a question that the lead can answer no time elapses (i.e., response is instantaneous).
 * Developers may not ask questions during the morning standup meeting or the afternoon project status meeting.
+
+# Running the Program
+
+Compile each source file and run the `main` method in `Main.java`
