@@ -145,7 +145,7 @@ public class Manager extends Employee implements Knowledgeable {
 		long delta = Workday.getDelta();
 		while(delta <= Time.PM_FIVE.getMillis()){
 			try {
-				this.wait(Time.PM_FIVE.getMillis() - delta);
+				Thread.sleep(Time.PM_FIVE.getMillis() - delta);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
