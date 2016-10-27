@@ -51,14 +51,16 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 		while(Workday.getDelta() < Time.PM_FOUR.getMillis()) {
 			long delta = Workday.getDelta();
 
-			if (delta >= Time.PM_TWELVE.getMillis() && !this.hasEatenLunch) { // TODO: Can they take their lunch break before 12PM?
+			if (delta >= Time.PM_TWELVE.getMillis() && !this.hasEatenLunch) {
 				this.takeLunch();
 			} else if (this.waitingForAnswers.size() > 0) {
 				// Answer the question of the first Employee in the Queue
 				this.answerQuestion(this.waitingForAnswers.poll());
+			} else if (rng.nextDouble() < 0.1) {
+				// A Question is Asked 10% of the Time
+				this.askQuestion();
 			} else {
-				// TODO: Randomly ask a question to the Manager
-				// TODO: Say that working
+				System.out.println("TeamLead X works.");
 			}
 		}
 
@@ -79,7 +81,7 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 		return this.manager;
 	}
 
-	public void answerQuestion(CyclicBarrier questionMeeting) { // TODO: Change to Barrier; Dev makes one, and TeamLead also makes one
+	public void answerQuestion(CyclicBarrier questionMeeting) {
 		if (rng.nextDouble() < 0.5) {
 			this.askQuestion();
 		}

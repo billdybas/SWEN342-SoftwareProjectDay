@@ -22,11 +22,13 @@ public class Developer extends Employee implements Curious {
     	while(Workday.getDelta() < Time.PM_FOUR.getMillis()) {
     		long delta = Workday.getDelta();
 
-			if (delta >= Time.PM_TWELVE.getMillis() && !this.hasEatenLunch) { // TODO: Can they take their lunch break before 12PM?
+			if (delta >= Time.PM_TWELVE.getMillis() && !this.hasEatenLunch) {
 				this.takeLunch();
+			} else if (rng.nextDouble() < 0.1) {
+				// A Question is Asked 10% of the Time
+				this.askQuestion();
 			} else {
-				// TODO: Randomly ask a question to the TeamLead
-				// TODO: Say that working
+				System.out.println("Developer X works.");
 			}
     	}
 
