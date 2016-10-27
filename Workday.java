@@ -20,7 +20,7 @@ public class Workday {
 		String hourString;
 		String minuteString;
 
-		long hour = (time / Time.HOUR.getMillis()) + 8;
+		int hour = (int)Math.floor(time / Time.HOUR.getMillis()) + 8;
 		if (hour > 11) {
 			amOrPm = "PM";
 		}

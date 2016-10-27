@@ -45,7 +45,6 @@ public class Manager extends Employee implements Knowledgeable {
 
 		// Arrive at 8AM
 		this.arrive();
-		System.out.println("The manager arrives at the firm at 8:00am");
 
 		// Wait for all Team Leads to arrive
 		try {
@@ -127,6 +126,8 @@ public class Manager extends Employee implements Knowledgeable {
 	@Override
 	public void arrive() {
 		// TODO: First to arrive at 8 AM
+		System.out.println("The manager arrives at the firm at 8:00am");
+		// TODO: Open latch for all other employees to arrive
 	}
 
 	@Override
@@ -147,13 +148,9 @@ public class Manager extends Employee implements Knowledgeable {
 			try {
 				Thread.sleep(Time.PM_FIVE.getMillis() - delta);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		super.leave();
-		
-		// TODO: Ensures that all employees have left
-		// TODO: Leaves at 5 PM
 	}
 }

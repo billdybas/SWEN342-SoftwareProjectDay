@@ -5,6 +5,7 @@ public abstract class Employee implements Runnable {
 	protected boolean isEmployeeInFirm = false;
 	protected boolean hasEatenLunch = false;
 	protected Random rng = new Random();
+	// TODO: ids
 
 	public boolean isInFirm() {
 		return isEmployeeInFirm;
