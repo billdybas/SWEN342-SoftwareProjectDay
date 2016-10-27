@@ -15,7 +15,7 @@ public class ConferenceRoom {
 	
 	public static void getReservation(Employee whoWantsRoom) {
 		reservationList.add(whoWantsRoom);
-		while(true) {
+		while(true) { // TODO: Simplify
 			if (!reservationList.peek().equals(whoWantsRoom)) {
 				try {
 					whoWantsRoom.wait();
@@ -28,6 +28,6 @@ public class ConferenceRoom {
 	
 	public static void releaseReservation(Employee whoHasRoom) {
 		reservationList.poll();
-		// TODO: notifyAll
+		reservationList.notifyAll();
 	}
 }

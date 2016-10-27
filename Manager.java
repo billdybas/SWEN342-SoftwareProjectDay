@@ -75,19 +75,20 @@ public class Manager extends Employee implements Knowledgeable {
 				}
 			} else if (this.waitingForAnswers.size() > 0) {
 				// Answer the question of the first Employee in the Queue
-				this.answerQuestion(this.waitingForAnswers.poll()); // TODO: Make sure employees in the Queue wait for their question to be answered
+				this.answerQuestion(this.waitingForAnswers.poll());
 			} else {
 				// TODO: Say that the Manager is Working
 			}
 		}
 
+		// Anyone who is still waiting for questions to be answered is told to come back tomorrow
 		for(CyclicBarrier question : waitingForAnswers){
 			question.reset();
 		}
 		
-		// Wait for all Team Leads to arrive
+		// Wait for all Members to arrive
 		try {
-			System.out.println("Manager waits for Team Leads to arrive.");
+			System.out.println("Manager waits for Everyone to arrive.");
 			this.statusUpdateBarrier.await();
 		} catch (InterruptedException | BrokenBarrierException e) {
 			e.printStackTrace();
@@ -114,7 +115,6 @@ public class Manager extends Employee implements Knowledgeable {
 		try {
 			questionMeeting.await();
 		} catch (InterruptedException | BrokenBarrierException e) {
-
 			e.printStackTrace();
 		}
 	}

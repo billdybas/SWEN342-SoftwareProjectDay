@@ -65,12 +65,10 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 		try {
 			manager.getStatusUpdateBarrier().await();
 		} catch (InterruptedException | BrokenBarrierException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		// After meeting, wait for conference room and all developers on same team present, enter room and have 15 minute meeting
-
+		
+		this.leave();
 	}
 
 	public CyclicBarrier getDeveloperStandUpBarrier() {
@@ -81,7 +79,7 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 		return this.manager;
 	}
 
-	public void answerQuestion(Employee whoHasQuestion) {
+	public void answerQuestion(Employee whoHasQuestion) { // TODO: Change to Barrier; Dev makes one, and TeamLead also makes one
 		if (rng.nextDouble() < 0.5) {
 			// TODO: go to PM office w/ developer
 
@@ -120,7 +118,7 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 	public void askQuestion() {
 		// TODO: go to PM office to ask question
 
-		CyclicBarrier questionMeeting = new CyclicBarrier(2, new Runnable() {
+		CyclicBarrier questionMeeting = new CyclicBarrier(1, new Runnable() {
 			public void run(){
 				try {
 					this.wait(10 * Time.MINUTE.getMillis());
@@ -135,7 +133,6 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 		try {
 			questionMeeting.await();
 		} catch (InterruptedException | BrokenBarrierException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

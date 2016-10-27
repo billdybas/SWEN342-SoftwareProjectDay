@@ -13,7 +13,6 @@ public class Main {
 			for (int j = 0; j < 3; j++) {
 					developers.add(new Developer(leader));
 			}
-
 		}
 	}
 }

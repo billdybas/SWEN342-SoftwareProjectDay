@@ -34,11 +34,13 @@ public class Developer extends Employee implements Curious {
 		} catch (InterruptedException | BrokenBarrierException e) {
 			e.printStackTrace();
 		}
+    	
+    	this.leave();
     }
 
   @Override
   public void askQuestion() {
       // Ask the Team Lead a Question
-      leader.answerQuestion(this);
+      leader.answerQuestion(this); // TODO: Change to Barrier
   }
 }
