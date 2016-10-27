@@ -4,8 +4,9 @@ import java.util.concurrent.CyclicBarrier;
 public class Developer extends Employee implements Curious {
     private TeamLead leader;
 
-    public Developer(TeamLead leader) {
+    public Developer(TeamLead leader, int id) {
         this.leader = leader;
+        this.id = id;
     }
 
     @Override

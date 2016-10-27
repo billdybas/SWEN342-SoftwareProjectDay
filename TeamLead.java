@@ -10,9 +10,10 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 	private CyclicBarrier developerStandUpBarrier;
 	private boolean hasEatenLunch;
 
-	public TeamLead(Manager manager) {
+	public TeamLead(Manager manager, int id) {
 		this.manager = manager;
-
+		this.id = id;
+		
 		final TeamLead me = this;
 		this.developerStandUpBarrier = new CyclicBarrier(3, new Runnable() {
 			@Override

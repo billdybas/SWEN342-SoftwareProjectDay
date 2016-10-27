@@ -2,15 +2,17 @@ import java.util.Queue;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.CountDownLatch;
 
 public class Manager extends Employee implements Knowledgeable {
 
 	private Queue<CyclicBarrier> waitingForAnswers = new ConcurrentLinkedQueue<CyclicBarrier>();
 	private CyclicBarrier standUpBarrier;
 	private CyclicBarrier statusUpdateBarrier;
+	private CountDownLatch latch;
 	
-	public Manager() {
-
+	public Manager(CountDownLatch latch) {
+		this.latch = latch;
 		// The 3 TeamLead's Have to Arrive Before the Stand Up Meeting Begins
 		this.standUpBarrier = new CyclicBarrier(3, new Runnable() {
 			// Once Everyone Arrives, Meet for 15 Minutes
@@ -127,6 +129,7 @@ public class Manager extends Employee implements Knowledgeable {
 	public void arrive() {
 		// TODO: First to arrive at 8 AM
 		System.out.println("The manager arrives at the firm at 8:00am");
+		latch.countDown();
 		// TODO: Open latch for all other employees to arrive
 	}
 
