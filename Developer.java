@@ -1,13 +1,16 @@
 import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 
 public class Developer extends Employee implements Curious {
     private TeamLead leader;
 
-    public Developer(TeamLead leader, int id) {
+    public Developer(TeamLead leader, int id, CountDownLatch latch) {
         this.leader = leader;
         this.id = id;
+        this.latch = latch;
     }
+    
 
     @Override
     public void run() {

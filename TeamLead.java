@@ -1,6 +1,7 @@
 import java.util.Queue;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 
 public class TeamLead extends Employee implements Knowledgeable, Curious {
@@ -10,9 +11,10 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 	private CyclicBarrier developerStandUpBarrier;
 	private boolean hasEatenLunch;
 
-	public TeamLead(Manager manager, int id) {
+	public TeamLead(Manager manager, int id, CountDownLatch latch) {
 		this.manager = manager;
 		this.id = id;
+		this.latch = latch;
 		
 		final TeamLead me = this;
 		this.developerStandUpBarrier = new CyclicBarrier(3, new Runnable() {

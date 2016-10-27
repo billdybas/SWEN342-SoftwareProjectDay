@@ -5,15 +5,23 @@ import java.util.concurrent.CountDownLatch;
 public class Main {
 
 	public static void main(String[] args) {
+		TeamLead[] leads = new TeamLead[3];
+		Developer[] devs = new Developer[9];
 		CountDownLatch latch = new CountDownLatch(1);
 		Manager manager = new Manager(latch);
 		for (int i = 0; i < 3; i++) {
-			TeamLead leader = new TeamLead(manager, i);
+			leads[i] = new TeamLead(manager, i, latch);
 
-			List<Developer> developers = new ArrayList<Developer>();
 			for (int j = 0; j < 3; j++) {
-					developers.add(new Developer(leader, ((i*10)+j)));
+					devs[j*i] = new Developer(leads[i], ((i*10)+j), latch);
 			}
+		}
+		(new Thread(manager)).start();
+		for(TeamLead lead : leads){
+			(new Thread(lead)).start();
+		}
+		for(Developer dev : devs){
+			(new Thread(dev)).start();
 		}
 	}
 }

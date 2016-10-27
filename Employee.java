@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.concurrent.CountDownLatch;
 
 public abstract class Employee implements Runnable {
 
@@ -6,6 +7,7 @@ public abstract class Employee implements Runnable {
 	protected boolean hasEatenLunch = false;
 	protected Random rng = new Random();
 	protected int id;
+	protected CountDownLatch latch;
 
 	public boolean isInFirm() {
 		return isEmployeeInFirm;
@@ -13,7 +15,12 @@ public abstract class Employee implements Runnable {
 
 	public void arrive() {
 		// Randomly Sleep Between 0 and 30 Minutes, and then arrive
-		
+		try {
+			latch.await();
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		try {
 			Thread.sleep(rng.nextInt((int)(Time.HALF_HOUR.getMillis())));
 		} catch (InterruptedException e) {
