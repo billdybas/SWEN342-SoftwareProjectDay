@@ -5,7 +5,7 @@ import java.util.concurrent.CyclicBarrier;
 
 public class Manager extends Employee implements Knowledgeable {
 
-	private Queue<Employee> waitingForAnswers = new ConcurrentLinkedQueue<Employee>();
+	private Queue<CyclicBarrier> waitingForAnswers = new ConcurrentLinkedQueue<CyclicBarrier>();
 	private CyclicBarrier standUpBarrier;
 	private CyclicBarrier statusUpdateBarrier;
 	
@@ -81,6 +81,10 @@ public class Manager extends Employee implements Knowledgeable {
 			}
 		}
 
+		for(CyclicBarrier question : waitingForAnswers){
+			question.reset();
+		}
+		
 		// Wait for all Team Leads to arrive
 		try {
 			System.out.println("Manager waits for Team Leads to arrive.");
@@ -92,8 +96,8 @@ public class Manager extends Employee implements Knowledgeable {
 		this.leave();
 	}
 
-	public void knockOnDoor(Employee whoIsKnocking) {
-		this.waitingForAnswers.add(whoIsKnocking);
+	public void knockOnDoor(CyclicBarrier questionMeeting) {
+		this.waitingForAnswers.add(questionMeeting);
 	}
 
 	public CyclicBarrier getStandUpBarrier() {
@@ -105,11 +109,12 @@ public class Manager extends Employee implements Knowledgeable {
 	}
 
 	@Override
-	public void answerQuestion(Employee whoHasQuestion) {
+	public void answerQuestion(CyclicBarrier questionMeeting) {
 		// Answering a Question takes 10 minutes
 		try {
-			this.wait(10 * Time.MINUTE.getMillis());
-		} catch (InterruptedException e) {
+			questionMeeting.await();
+		} catch (InterruptedException | BrokenBarrierException e) {
+
 			e.printStackTrace();
 		}
 	}

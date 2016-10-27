@@ -13,7 +13,7 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 	public TeamLead(Manager manager) {
 		this.manager = manager;
 		
-		TeamLead me = this;
+		final TeamLead me = this;
 		this.developerStandUpBarrier = new CyclicBarrier(3, new Runnable() {
 			@Override
 			public void run() {
@@ -81,13 +81,36 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 		return this.manager;
 	}
 
-	@Override
 	public void answerQuestion(Employee whoHasQuestion) {
 		if (rng.nextDouble() < 0.5) {
 			// TODO: go to PM office w/ developer
 
-			// Ask the Manager the Developer's Question
-			manager.answerQuestion(whoHasQuestion);
+			CyclicBarrier questionMeeting = new CyclicBarrier(2, new Runnable() {
+				public void run(){
+					try {
+						this.wait(10 * Time.MINUTE.getMillis());
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			
+			manager.knockOnDoor(questionMeeting);
+			try {
+				questionMeeting.await();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch( BrokenBarrierException e){
+				System.out.println("X saves their question for a different day");
+			}
+
+		}else{
+			try {
+				//takes 10 min to answer question
+				this.wait(10*Time.MINUTE.getMillis());
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 
 		// TODO: return to work
@@ -97,7 +120,23 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 	public void askQuestion() {
 		// TODO: go to PM office to ask question
 
-		// Ask the Manager a Question
-		manager.answerQuestion(this);
+		CyclicBarrier questionMeeting = new CyclicBarrier(2, new Runnable() {
+			public void run(){
+				try {
+					this.wait(10 * Time.MINUTE.getMillis());
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
+		// Ask the Manager the Developer's Question
+		manager.knockOnDoor(questionMeeting);
+		try {
+			questionMeeting.await();
+		} catch (InterruptedException | BrokenBarrierException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
