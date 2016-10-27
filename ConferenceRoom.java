@@ -15,14 +15,12 @@ public class ConferenceRoom {
 	
 	public static void getReservation(Employee whoWantsRoom) {
 		reservationList.add(whoWantsRoom);
-		while(true) { // TODO: Simplify
-			if (!reservationList.peek().equals(whoWantsRoom)) {
+		while(!reservationList.peek().equals(whoWantsRoom)) {
 				try {
 					whoWantsRoom.wait();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-			}
 		}
 	}
 	
