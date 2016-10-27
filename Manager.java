@@ -18,6 +18,7 @@ public class Manager extends Employee implements Knowledgeable {
 			public void run(){
 				try {
 					Thread.sleep(15 * Time.MINUTE.getMillis());
+					System.out.println("The team leads and the Manager have their standup until " + WorkDay.timeString(getDelta()));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -31,6 +32,7 @@ public class Manager extends Employee implements Knowledgeable {
 			public void run(){
 				try {
 					Thread.sleep(15 * Time.MINUTE.getMillis());
+					System.out.println("The firm gives a status update to the manager");
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -43,6 +45,7 @@ public class Manager extends Employee implements Knowledgeable {
 
 		// Arrive at 8AM
 		this.arrive();
+		System.out.println("The manager arrives at the firm at 8:00am");
 
 		// Wait for all Team Leads to arrive
 		try {
@@ -60,6 +63,8 @@ public class Manager extends Employee implements Knowledgeable {
 				// After 2PM, the Manager Should Meet Until 3PM
 				try {
 					Thread.sleep(Time.PM_THREE.getMillis() - delta);
+
+					System.out.println("The Manager stays in the meeting until " + Workday.timeString(getDelta()) );
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

@@ -14,4 +14,28 @@ public class Workday {
 	public static long getDelta() {
 		return System.currentTimeMillis() - startTimeMillis;
 	}
+
+	public static String timeString(long time) {
+		String amOrPm; //AM or PM
+		String hourString;
+		String minuteString;
+
+		long hour = (time / 600) + 8;
+		if (hour > 11) {
+			amOrPm = "PM";
+		}
+		else {
+			amOrPm = "AM";
+		}
+		if (hour > 12) {
+			hour -= 12;
+		}
+
+		hourString = Long.toString(hour);
+
+		int minute = (int)(time % 600) / 10;
+		minuteString = String.format("%02d", minute);
+
+		return hourString + ":" + minuteString + " " + amOrPm;
+	}
 }
