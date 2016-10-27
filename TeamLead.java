@@ -62,19 +62,19 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 
 			// If at least 12PM and hasn't eaten lunch, take lunch
 			if (delta >= Time.PM_TWELVE.getMillis() && !this.hasEatenLunch) {
-				System.out.println(Workday.timeString(Workday.getDelta()) + ": TeamLead takes lunch");
+				System.out.println(Workday.timeString(Workday.getDelta()) + ": TeamLead  " + this.id + "  takes lunch");
 				this.takeLunch();
-				System.out.println(Workday.timeString(Workday.getDelta()) + ": TeamLead comes back from lunch");
+				System.out.println(Workday.timeString(Workday.getDelta()) + ": TeamLead  " + this.id + "  comes back from lunch");
 			} else if (this.waitingForAnswers.size() > 0) {
 				// Answer the question of the first Employee in the Queue
 				this.answerQuestion(this.waitingForAnswers.poll());
 			} else if (rng.nextDouble() < 0.1) {
 				// A Question is Asked 10% of the Time
-				System.out.println(Workday.timeString(Workday.getDelta()) + ": TeamLead goes to the manager for a question");
+				System.out.println(Workday.timeString(Workday.getDelta()) + ": TeamLead " + this.id + " goes to the manager for a question");
 				this.askQuestion();
 			} else {
 				// Otherwise, work
-				System.out.println("TeamLead X works.");
+				System.out.println("TeamLead" + this.id + " works.");
 			}
 		}
 
