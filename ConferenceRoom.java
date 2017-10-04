@@ -22,7 +22,9 @@ public class ConferenceRoom {
 		reservationList.add(whoWantsRoom);
 		while(!reservationList.peek().equals(whoWantsRoom)) {
 			try {
-				whoWantsRoom.wait();
+				synchronized(whoWantsRoom) {
+					whoWantsRoom.wait();
+				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -36,7 +38,13 @@ public class ConferenceRoom {
 	public static void releaseReservation(Employee whoHasRoom) {
 		if (reservationList.peek().equals(whoHasRoom)) {
 			reservationList.poll();
-			reservationList.notifyAll();
+			
+			Employee next = reservationList.peek();
+			if (next != null) {
+				synchronized (next) {
+					next.notifyAll();
+				}
+			}
 		}
 	}
 }

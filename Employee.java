@@ -34,7 +34,7 @@ public abstract class Employee implements Runnable {
 		this.hasEatenLunch = true;
 		try {
 			// Takes Lunch for a Random Amount of Time Between 30 min and 1 Hour
-			Thread.sleep(rng.nextInt((int)((Time.HOUR.getMillis() - timeArrived )- Time.HALF_HOUR.getMillis())) + Time.HALF_HOUR.getMillis());
+			Thread.sleep(rng.nextInt((int)Time.HALF_HOUR.getMillis()) + Time.HALF_HOUR.getMillis());
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

@@ -132,15 +132,15 @@ public class Manager extends Employee implements Knowledgeable {
 		this.waitingForAnswers.add(questionMeeting);
 	}
 
-	public CyclicBarrier getStandUpBarrier() {
+	public synchronized CyclicBarrier getStandUpBarrier() {
 		return this.standUpBarrier;
 	}
 
-	public CyclicBarrier getStatusUpdateBarrier() {
+	public synchronized CyclicBarrier getStatusUpdateBarrier() {
 		return this.statusUpdateBarrier;
 	}
 	
-	public boolean readyForStatusMeeting() {
+	public synchronized boolean readyForStatusMeeting() {
 		return this.readyForStatusMeeting;
 	}
 

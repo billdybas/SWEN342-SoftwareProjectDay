@@ -16,7 +16,7 @@ public class Workday {
 	/**
 	 * @return How Much Time Has Elapsed Since Program Start
 	 */
-	public static long getDelta() {
+	public static synchronized long getDelta() {
 		return System.currentTimeMillis() - startTimeMillis;
 	}
 
