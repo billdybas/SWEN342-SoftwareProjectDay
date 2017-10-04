@@ -17,8 +17,8 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 		this.latch = latch;
 		
 		final TeamLead me = this;
-		// A TeamLead's 3 Developers Have to Arrive Before the Stand Up Begins
-		this.developerStandUpBarrier = new CyclicBarrier(3, new Runnable() {
+		// A TeamLead's 3 Developers (and the TeamLead itself) Have to Arrive Before the Stand Up Begins
+		this.developerStandUpBarrier = new CyclicBarrier(4, new Runnable() {
 			@Override
 			public void run() {
 				// They wait for the ConferenceRoom to be available
@@ -97,11 +97,11 @@ public class TeamLead extends Employee implements Knowledgeable, Curious {
 		return this.developerStandUpBarrier;
 	}
 
-	public Manager getManager() {
+	public synchronized Manager getManager() {
 		return this.manager;
 	}
 	
-	public boolean hasMetWithManager() {
+	public synchronized boolean hasMetWithManager() {
 		return this.hasMetWithManager;
 	}
 
